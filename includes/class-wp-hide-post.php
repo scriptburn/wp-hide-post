@@ -409,6 +409,43 @@ class wp_hide_post
     {
         return SCB_LicenseManager::getInstance()->item($this->info('id'));
     }
+
+    public function support_callback()
+    {
+        $obj_license = scb_get_license($this->info('id'));
+        $info        = array();
+
+        if (is_object($obj_license))
+        {
+            $info        = $obj_license->extendedInfo();
+            $info['key'] = $obj_license->get_license_key();
+
+        }
+
+        $output = array();
+                                    p_l($info);
+        if ($info['price'] > 0)
+        {
+            $output[] = '<h2>For WP hide post Pro users</h2>';
+            if ($info['key'] && $info['license'] == 'valid')
+            {
+                $subject = ("WP hide post Pro Support Request");
+                $body    = "";
+                $body .= "License:" . $info['key'] . "%0D%0A%0D%0A";
+                $body .= 'Systems Info:' . home_url() . "?support_info" . "%0D%0A%0D%0A";
+                $body .= 'Hash:' . get_option('wphp_support_hash') . "%0D%0A%0D%0A%0D%0A%0D%0A";
+                $body .= "Enter your message here ";
+                $output[] = sprintf('<a href="mailto:support@scriptburn.com?subject=%1$s&body=%2$s">Click here </a>', $subject, $body);
+            }
+            else
+            {
+                $output[] = "Sorry you don't have WP hide post Pro license";
+            }
+            $output[] = '<h2>For WP hide post Lite users</h2>';
+        }
+        $output[] = 'Please submit your questions  <a target="_blank" href="https://github.com/scriptburn/wp-hide-post">Here</a>';
+        echo (implode("\n", $output));
+    }
     public function init()
     {
         $this->settingManager = wphp_settings::instance(array
@@ -416,42 +453,8 @@ class wp_hide_post
                 'id'                => $this->info('id'),
                 'page_title'        => $this->info('title') . " settings",
                 'setting_page_name' => $this->setting_menu_page(),
-                'support_callback'  => function ()
-            {
-                    $obj_license   = scb_get_license($this->info('id'));
-                    $info          = array();
-                    $info['price'] = "0";
-                    if (is_object($obj_license))
-                {
-                        $info        = $obj_license->extendedInfo();
-                        $info['key'] = $obj_license->get_license_key();
-
-                    }
-
-                    $output        = array();
-                    $info['price'] = 1;
-                    if ($info['price'] > 0)
-                {
-                        $output[] = '<h2>For WP hide post Pro users</h2>';
-                        if ($info['key'] && $info['license'] == 'valid')
-                    {
-                            $subject = ("WP hide post Pro Support Request");
-                            $body    = "";
-                            $body .= "License:" . $info['key'] . "%0D%0A%0D%0A";
-                            $body .= 'Systems Info:' . home_url() . "?support_info" . "%0D%0A%0D%0A";
-                            $body .= 'Hash:' . get_option('wphp_support_hash') . "%0D%0A%0D%0A%0D%0A%0D%0A";
-                            $body .= "Enter your message here ";
-                            $output[] = sprintf('<a href="mailto:support@scriptburn.com?subject=%1$s&body=%2$s">Click here </a>', $subject, $body);
-                        }
-                    else
-                    {
-                            $output[] = "Sorry you don't have WP hide post Pro license";
-                        }
-                        $output[] = '<h2>For WP hide post Lite users</h2>';
-                    }
-                    $output[] = 'Please submit your questions  <a target="_blank" href="https://github.com/scriptburn/wp-hide-post">Here</a>';
-                    echo (implode("\n", $output));
-                },
+                'support_callback'  => array($this, 'support_callback')
+                ,
             ));
 
         scb_license_manager()->add(
