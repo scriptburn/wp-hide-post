@@ -256,7 +256,7 @@ if (!class_exists('wphp_settings'))
             //initialize settings
             $this->settings_api->admin_init();
 
-            if (isset($_POST['option_page']) && isset($this->all_tabs[$_POST['option_page']]) && is_callable($this->all_tabs[$_POST['option_page']]['options']['form']['pre_handler']))
+            if (isset($_POST['option_page']) && isset($this->all_tabs[$_POST['option_page']]) && isset($this->all_tabs[@$_POST['option_page']]['options']['form']['pre_handler'])  && is_callable($this->all_tabs[@$_POST['option_page']]['options']['form']['pre_handler']))
             {
                 $ret = call_user_func_array($this->all_tabs[$_POST['option_page']]['options']['form']['pre_handler'], [$_POST]);
             }
@@ -353,14 +353,14 @@ if (!class_exists('wphp_settings'))
             {
                 return;
             }
-            ob_end_clean();
+            @ob_end_clean();
             nocache_headers();
 
             header('Content-Type: text/plain');
             header('Content-Disposition: attachment; filename="' . $filename . '"');
 
-            echo wp_strip_all_tags($_POST['scb-sysinfo']);
-            wp_die();
+          //  die(   wp_strip_all_tags($_POST['scb-sysinfo']);
+            die(wp_strip_all_tags($_POST['scb-sysinfo']));
         }
 
         /**
