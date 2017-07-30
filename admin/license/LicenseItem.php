@@ -406,13 +406,20 @@ class SCB_LicenseItem
     }
     public function activate_license()
     {
-
-        $response = $this->send_request('activate_license');
-
-        if ($response)
+        try
         {
-            $this->set_license_data($response);
-            return true;
+            $response = $this->send_request('activate_license');
+
+            if ($response)
+            {
+                $this->set_license_data($response);
+                return true;
+            }
+        }
+        catch (\Exception $e)
+        {
+            return false;
+
         }
 
         return false;
@@ -420,36 +427,50 @@ class SCB_LicenseItem
     }
     public function deactivate_license()
     {
-
-        $response = $this->send_request('deactivate_license');
-        if ($response)
+        try
         {
-            $this->set_license_data($response);
-            return true;
+            $response = $this->send_request('deactivate_license');
+            if ($response)
+            {
+                $this->set_license_data($response);
+                return true;
+            }
         }
+        catch (\Exception $e)
+        {
+            return false;
 
+        }
         return false;
     }
     public function check_license($fresh = false)
     {
-
-        $backtrace = debug_backtrace();
-        $calle     = $backtrace[1]['function'];
-
-        $this->debug('license', __FUNCTION__ . "-" . __LINE__ . "-" . __LINE__, $calle);
-
-        if ($fresh)
+        try
         {
-            if (!$response = $this->send_request('check_license'))
+            $backtrace = debug_backtrace();
+            $calle     = $backtrace[1]['function'];
+
+            $this->debug('license', __FUNCTION__ . "-" . __LINE__ . "-" . __LINE__, $calle);
+
+            if ($fresh)
             {
-                return false;
+                if (!$response = $this->send_request('check_license'))
+                {
+                    return false;
+                }
             }
+            else
+            {
+                return true;
+            }
+            $this->set_license_data($response);
         }
-        else
+        catch (\Exception $e)
         {
-            return true;
+            return false;
+
         }
-        $this->set_license_data($response);
+
         return true;
     }
 

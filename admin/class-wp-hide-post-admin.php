@@ -266,6 +266,7 @@ HTML;
                 'short_label' => 'Feeds',
                 'description' => '',
             ),
+            
             'post_recent'   => array(
                 'label'        => wphp_('Hide in Wp Native Recent post widget.'),
                 'short_label'  => 'Recent post',
@@ -607,7 +608,7 @@ HTML;
 
     public function create_post_type()
     {
-
+        return ;
         register_post_type('acme_product',
             array(
                 'labels'      => array(
