@@ -76,8 +76,8 @@ class wp_hide_post
     private static $instance;
     private $plugin_admin;
 
-    const id   = 'wp-hide-post';
-    const name = 'Wp Hide Post';
+    const id   = 'wp-hide-post-pro';
+    const name = 'WP Hide Post Pro';
 
     private $info;
 
