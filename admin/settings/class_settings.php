@@ -258,7 +258,7 @@ if (!class_exists('wphp_settings'))
 
             if (isset($_POST['option_page']) && isset($this->all_tabs[$_POST['option_page']]) && isset($this->all_tabs[@$_POST['option_page']]['options']['form']['pre_handler'])  && is_callable($this->all_tabs[@$_POST['option_page']]['options']['form']['pre_handler']))
             {
-                $ret = call_user_func_array($this->all_tabs[$_POST['option_page']]['options']['form']['pre_handler'], [$_POST]);
+                $ret = call_user_func_array($this->all_tabs[$_POST['option_page']]['options']['form']['pre_handler'], array($_POST));
             }
         }
 
