@@ -111,6 +111,18 @@ Ditto. It will be deleted. If you had any existing data (if you had it active be
 
 == Changelog ==
 
+= 2.0.6 =
+*Release Date - 31 July 2017*
+
+Fix: post was not hiding if the static page was selected as homepage
+Fix: Compatibility with old version of PHP
+
+
+= 2.0.5 =
+*Release Date - 30 July 2017*
+
+Fix: Compatibility with old version of PHP
+
 = 2.0.4 =
 *Release Date - 30 July 2017*
 
