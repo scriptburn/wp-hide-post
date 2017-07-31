@@ -76,8 +76,8 @@ class wp_hide_post
     private static $instance;
     private $plugin_admin;
 
-    const id   = 'wp-hide-post-pro';
-    const name = 'WP Hide Post Pro';
+    const id   = 'wp-hide-post';
+    const name = 'WP Hide Post';
 
     private $info;
 
@@ -95,7 +95,7 @@ class wp_hide_post
     {
         if (is_null(self::$instance))
         {
-            self::$instance = new static();
+            self::$instance = new self();
         }
 
         return self::$instance;
@@ -407,7 +407,7 @@ class wp_hide_post
     }
     public function license()
     {
-        return SCB_LicenseManager::getInstance()->item($this->info('id'));
+        return SCB_LicenseManager::getInstance()->item('wp-hide-post-pro');
     }
     public function init()
     {
@@ -453,20 +453,23 @@ class wp_hide_post
                     echo (implode("\n", $output));
                 },
             ));
+        if (wphp_ispro())
+        {
 
-        scb_license_manager()->add(
-            $this->info('id'),
-            null,
-            'plugin',
-            $this->info('name'),
-            null,
-            array(
-                'license_text' => array('invalid' => 'Get your WP Hide Post Pro license from here <a href="http://scriptburn.com/wphp" target="_blank">here</a>'),
-                'store_url'    => "http://scriptburn.com",
-                'file'         => $this->info('file'),
+            scb_license_manager()->add(
+                'wp-hide-post-pro',
+                null,
+                'plugin',
+                'WP Hide Post Pro',
+                null,
+                array(
+                    'license_text' => array('invalid' => 'Get your WP Hide Post Pro license from here <a href="http://scriptburn.com/wphp" target="_blank">here</a>'),
+                    'store_url'    => "http://scriptburn.com",
+                    'file'         => $this->info('file'),
 
-            )
-        );
+                )
+            );
+        }
     }
     public function define_globals()
     {

@@ -37,8 +37,11 @@ class EDD_SL_Plugin_Updater
         $this->version  = $_api_data['version'];
 
         // Set up hooks.
-        $this->init();
-        add_action('admin_init', array($this, 'show_changelog'));
+        if (wphp_ispro())
+        {
+            $this->init();
+            add_action('admin_init', array($this, 'show_changelog'));
+        }
     }
 
     /**
@@ -104,7 +107,7 @@ class EDD_SL_Plugin_Updater
 
                     $_transient_data->response[$this->name]         = $version_info;
                     $_transient_data->response[$this->name]->plugin = $this->name;
-                  }
+                }
 
                 $_transient_data->last_checked = time();
                 //$_transient_data->last_updated=date( ( 'M j, Y @ H:i' )

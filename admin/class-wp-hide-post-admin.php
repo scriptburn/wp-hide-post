@@ -69,7 +69,7 @@ class wp_hide_post_Admin
         $this->wp_hide_post = $wp_hide_post;
         $this->version      = $version;
         $this->license      = $license;
-        $this->post_types   = $this->license->is_valid() ? wphp_get_setting('wphp_gen', 'wphp_post_types') : false;
+        $this->post_types   =is_object($this->license) && $this->license->is_valid() ? wphp_get_setting('wphp_gen', 'wphp_post_types') : false;
         if (!is_array($this->post_types))
         {
             $this->post_types = array('post', 'page');
@@ -644,7 +644,8 @@ HTML;
     }
     public function register_setting_page()
     {
-        $valid = $this->license->is_valid();
+        
+        $valid = is_object($this->license) && $this->license->is_valid();
         wp_hide_post()->settingManager()->register_tab(array('id' => 'wphp_gen', 'title' => 'General'));
         $options = array();
         foreach ((array) scb_custom_post_types() as $type => $detail)
@@ -657,7 +658,7 @@ HTML;
                 $options[$type]['text'] .= " -- For WP hide post Pro users only";
             }
         }
-        $pro = '<div><a target="_blank"  style="color:red" href="' . $this->item_url . '">For WP hide post Pro Users only</a></div>';
+        $pro = '<div><a target="_blank"  style="color:red" href="http://scriptburn.com/wphp">For WP hide post Pro Users only</a></div>';
         wp_hide_post()->settingManager()->register_setting_field('wphp_gen', array(
             array('name'  => 'wphp_post_types',
                 'label'       => wphp_('Allowed custom post types'),
@@ -690,9 +691,9 @@ HTML;
     }
     public function register_plugin($licenses)
     {
-        $licenses[] = array('id' => wp_hide_post()->info('id'),
+        $licenses[] = array('id' => 'wp-hide-post-pro',
             'type'                   => 'plugin',
-            'name'                   => wp_hide_post()->info('name'),
+            'name'                   => 'WP Hide Post Pro',
             'label'                  => 'WP hide Post Plugin',
             'options'                => array(
                 'license_text' => array('invalid' => 'Get your WP Hide Post Pro license from here <a href="http://scriptburn.com/wphp" target="_blank">here</a>'),
@@ -804,7 +805,7 @@ HTML;
     //render our  quick edit and bulk edit box
     public function display_custom_quickedit($column_name, $post_type)
     {
-        $valid = $this->license->is_valid();
+        $valid =is_object($this->license) && $this->license->is_valid();
 
         if (!wphp_get_setting('wphp_gen', 'show_in_quickedit'))
         {
@@ -863,7 +864,7 @@ HTML;
             $allChecked = $detail['value'];
             $index++;
         }
-         $pro = '<div style="padding:10px;padding-bottom:0px"><a target="_blank"  style="color:red" href="' . $this->item_url . '">For WP hide post Pro Users only</a></div>';
+         $pro = '<div style="padding:10px;padding-bottom:0px"><a target="_blank"  style="color:red" href="http://scriptburn.com/wphp">For WP hide post Pro Users only</a></div>';
         if ($post_type !== 'page')
         {
             $pre[] = '<script>(function($)
@@ -980,7 +981,7 @@ $current_v = isset($_GET['wphp_hidden_on']) ? $_GET['wphp_hidden_on'] : array();
     }
 
 // Filter the posts acording to selected filter in post list select box
-    public function query_posts_join_custom_filter($join, &$wp_query)
+    public function query_posts_join_custom_filter($join,  $wp_query)
     {
 
         global $wpdb, $pagenow;

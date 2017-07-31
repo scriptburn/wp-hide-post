@@ -177,7 +177,7 @@ class wp_hide_post_Public
      * @param $where
      * @return unknown_type
      */
-    public function query_posts_where($where, &$wp_query = null)
+    public function query_posts_where($where,  $wp_query = null)
     {
 
         p_l("called: wphp_query_posts_where");
