@@ -154,6 +154,7 @@ if (!class_exists('wphp_settings'))
             $this->license_fields = array();
 
             $licenses = apply_filters('scb_license_items', $licenses);
+      
             foreach ($licenses as $license)
             {
 
@@ -329,7 +330,7 @@ if (!class_exists('wphp_settings'))
             //p_d($this->all_tabs);
             if (isset($_POST['option_page']) && isset($this->all_tabs[$_POST['option_page']]) && is_callable($this->all_tabs[$_POST['option_page']]['options']['form']['post_handler']))
             {
-                $ret = call_user_func_array($this->all_tabs[$_POST['option_page']]['options']['form']['post_handler'], [$_POST]);
+                $ret = call_user_func_array($this->all_tabs[$_POST['option_page']]['options']['form']['post_handler'], array($_POST));
             }
             echo '<div class="wrap">';
             $this->settings_api->show_navigation();
