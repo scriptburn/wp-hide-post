@@ -359,6 +359,7 @@ class SCB_LicenseItem
             //   p_d( $url );
             //$this->debug('license', __FUNCTION__ . "-" . __LINE__, $url);
             $response = scb_license_manager()->sendGetRequest($url . http_build_query($api_params));
+            
         }
         else
         {

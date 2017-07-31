@@ -156,6 +156,7 @@ if (!class_exists('SCB_Item_Helper'))
 
         public function plugin_updater()
         {
+            
             $plugin_data = $this->plugin_data("", true);
             $plugin_conf = array(
                 'version'   => $plugin_data['Version'], // current version number

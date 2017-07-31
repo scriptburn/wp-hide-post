@@ -142,29 +142,38 @@ if (!function_exists('wphp_is_applicable'))
 
         $types = array_flip(wphp_allowed_post_types());
         unset($types['page']);
-
+        $ret   = 0;
         $types = array_flip($types);
 
         if (wphp_is_post_sidebar($wp_query))
         {
             //p_n(__LINE__);
-            return true;
+            $ret = 1;
         }
         elseif (is_admin() || is_singular())
         {
-            //p_n(__LINE__);
-            return false;
+
+            if (@is_front_page())
+            {
+                $ret = 4;
+            }
+            else
+            {
+                $ret = 0;
+            }
         }
         elseif (in_array($item_type, $types) || $item_type == 'page')
         {
             // p_n(__LINE__);
-            return true;
+            $ret = 2;
         }
         else
         {
-            // p_n(__LINE__);
-            return false;
+
+            $ret = 0;
         }
+        p_l($ret);
+        return $ret;
 
     }
 }
@@ -433,9 +442,13 @@ function scb_custom_post_types($output = 'objects')
     $types = (array) get_post_types($args, $output, $operator);
     unset($types['revision']);
     unset($types['nav_menu_item']);
-        unset($types['attachment']);
-
+    unset($types['attachment']);
 
     return empty($types) || !is_array($types) ? array() : $types;
 
+}
+
+function wphp_ispro()
+{
+    return (defined('WPHP_PRO') && WPHP_PRO) || wp_hide_post()->info('id') == 'wp-hide-post-pro';
 }

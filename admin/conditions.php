@@ -39,8 +39,7 @@ if (!function_exists('wphp_is_post_front_post'))
 {
     function wphp_is_post_front_post()
     {
-
-        return is_front_page() || is_home();
+         return is_front_page() || is_home();
     }
 }
 /**

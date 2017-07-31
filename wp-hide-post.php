@@ -16,7 +16,7 @@
  * Plugin Name:       WP Hide Post
  * Plugin URI:        http://scriptburn.com/wp-hide-post
  * Description:       Control the visibility of items on your blog by making posts/pages hidden on some parts , while still visible in other parts and search engines.
- * Version:           2.0.5
+ * Version:           2.0.6
  * Author:            scriptburn.com
  * Author URI:        http://www.scriptburn.com
  * License:           GPL-2.0+
@@ -31,7 +31,7 @@ if (!defined('WPINC'))
     die;
 }
 global $table_prefix;
-define('WPHP_VER', "2.0.3");
+define('WPHP_VER', "2.0.6");
 define('WPHP_DB_VER', "2");
 
 define('WPHP_PLUGIN_DIR', __DIR__ . "/");
