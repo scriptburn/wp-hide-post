@@ -13,14 +13,14 @@ var wphp_texts = {
     "uncaught_error": "Uncaught Error",
     "confirm": "Confirm",
 };
-$(document).ready(function()
+jQuery(document).ready(function()
 {
-    $(".chosen-select").chosen(
+    jQuery(".chosen-select").chosen(
     {
         'width': '400px'
     });
-    $("body").append('<div id="dialog-message" style="display:none;z-index:2000" title=""></div>');
-    modalDialog = $("#dialog-message").dialog(
+    jQuery("body").append('<div id="dialog-message" style="display:none;z-index:2000" title=""></div>');
+    modalDialog = jQuery("#dialog-message").dialog(
     {
         modal: true,
         autoOpen: false,
@@ -29,12 +29,12 @@ $(document).ready(function()
         {
             Ok: function()
             {
-                $(this).dialog("close");
+                jQuery(this).dialog("close");
             }
         }
     });
     /* quick edit ajax handler */
-    $('a.editinline1').on('click', function(event)
+    jQuery('a.editinline1').on('click', function(event)
     {
         var id = inlineEditPost.getId(this);
         set_wphp_hide_on_value(id);
@@ -43,13 +43,13 @@ $(document).ready(function()
         var data = {
             'action': 'wphp_post_visibility_data',
             'post_id': post_id,
-            'post_type': $("#posts-filter [name='post_type']").val()
+            'post_type': jQuery("#posts-filter [name='post_type']").val()
         };
-        var save_btn = $('#edit-' + post_id).find('.inline-edit-save>.save')
-        $(save_btn).data('label', $(save_btn).val());
-        $(save_btn).val('loading..');
-        $(save_btn).attr('disabled', true);
-        $.ajax(
+        var save_btn = jQuery('#edit-' + post_id).find('.inline-edit-save>.save')
+        jQuery(save_btn).data('label', $(save_btn).val());
+        jQuery(save_btn).val('loading..');
+        jQuery(save_btn).attr('disabled', true);
+        jQuery.ajax(
         {
             type: "POST",
             url: ajaxurl,
@@ -61,21 +61,21 @@ $(document).ready(function()
                 {
                     showModalMsg(wphp_texts.error, response.error,
                     {});
-                    $(save_btn).val($(save_btn).data('label'));
-                    $(save_btn).attr('disabled', false)
+                   jQuery(save_btn).val(jQuery(save_btn).data('label'));
+                    jQuery(save_btn).attr('disabled', false)
                 }
                 else
                 {
-                    $(save_btn).val($(save_btn).data('label'));
-                    $(save_btn).attr('disabled', false);
-                    $('.wphp_quickedit').replaceWith(response.html);
+                    jQuery(save_btn).val(jQuery(save_btn).data('label'));
+                    jQuery(save_btn).attr('disabled', false);
+                    jQuery('.wphp_quickedit').replaceWith(response.html);
                 }
             },
             fail: function(xhr, err)
             {
-                id = $(this)[0].data.split('&')[1].split("=")[1];
-                $(save_btn).val($(save_btn).data('label'));
-                $(save_btn).attr('disabled', false)
+                id = jQuery(this)[0].data.split('&')[1].split("=")[1];
+                jQuery(save_btn).val(jQuery(save_btn).data('label'));
+                jQuery(save_btn).attr('disabled', false)
                 showModalMsg(wphp_texts.error, formatErrorMessage(xhr, err));
             }
         });
@@ -87,9 +87,9 @@ function showModalMsg(title, body, option)
     option = typeof option === 'undefined' ?
     {} : option;
     option.title = title
-    $(modalDialog).dialog(option);
-    $(modalDialog).html(htmlBody(body));
-    $(modalDialog).dialog("open");
+    jQuery(modalDialog).dialog(option);
+    jQuery(modalDialog).html(htmlBody(body));
+    jQuery(modalDialog).dialog("open");
 }
 
 function htmlBody(body)
@@ -144,22 +144,22 @@ function formatErrorMessage(jqXHR, exception)
 function set_wphp_hide_on_value(post_id)
 {
     // define the edit row
-    var $edit_row = $('#edit-' + post_id);
-    var $post_row = $('#post-' + post_id);
+    var $edit_row = jQuery('#edit-' + post_id);
+    var $post_row = jQuery('#post-' + post_id);
     // get the data
-    var $wphp_hide_on = $('.column-wphp_hide_on', $post_row);
+    var $wphp_hide_on = jQuery('.column-wphp_hide_on', $post_row);
     // populate the data
     //$(':input[name="book_author"]', $edit_row).val($book_author);
     //$(':input[name="inprint"]', $edit_row).attr('checked', $inprint);
     ///
-    if (!$('.wphp_hidden_on', $wphp_hide_on).length || !$('.wphp_hide_on_data', $wphp_hide_on).length)
+    if (!jQuery('.wphp_hidden_on', $wphp_hide_on).length || !jQuery('.wphp_hide_on_data', $wphp_hide_on).length)
     {
         return;
     }
-    visibility_values = JSON.parse(decodeURIComponent($('.wphp_hidden_on', $wphp_hide_on).val()));
-    wphp_hide_on_data = JSON.parse(decodeURIComponent($('.wphp_hide_on_data', $wphp_hide_on).val()));
+    visibility_values = JSON.parse(decodeURIComponent(jQuery('.wphp_hidden_on', $wphp_hide_on).val()));
+    wphp_hide_on_data = JSON.parse(decodeURIComponent(jQuery('.wphp_hide_on_data', $wphp_hide_on).val()));
 
-        $('#' + wphp_hide_on_data['nonce_field'], $edit_row).val(wphp_hide_on_data['nonce_value']);
+        jQuery('#' + wphp_hide_on_data['nonce_field'], $edit_row).val(wphp_hide_on_data['nonce_value']);
 
 
     // refresh the quick menu properly
@@ -171,13 +171,13 @@ function set_wphp_hide_on_value(post_id)
     {
         if (visibility_values[key])
         {
-            $('[name="wphp_visibility_type\[' + key + '\]"]', $edit_row).attr('checked', 'checked');
+            jQuery('[name="wphp_visibility_type\[' + key + '\]"]', $edit_row).attr('checked', 'checked');
         }
-        $('[name="wphp_visibility_type_old\[' + key + '\]"]', $edit_row).val(visibility_values[key]);
+        jQuery('[name="wphp_visibility_type_old\[' + key + '\]"]', $edit_row).val(visibility_values[key]);
         //jQuery('#myfield').val(fieldValue);
     }
 }
-$(document).ready(function()
+jQuery(document).ready(function()
 {
     if(typeof inlineEditPost!=='undefined')
     {
@@ -201,15 +201,15 @@ $(document).ready(function()
         }
     };
 }
-    $('#bulk_edit').on('click', function(event)
+   jQuery('#bulk_edit').on('click', function(event)
     {
         // define the bulk edit row
-        var $bulk_row = $('#bulk-edit');
+        var $bulk_row = jQuery('#bulk-edit');
         // get the selected post ids that are being edited
         var $post_ids = new Array();
         $bulk_row.find('#bulk-titles').children().each(function()
         {
-            $post_ids.push($(this).attr('id').replace(/^(ttle)/i, ''));
+            $post_ids.push(jQuery(this).attr('id').replace(/^(ttle)/i, ''));
         });
         var data = {
             'action': 'save_bulk_edit_data',
@@ -223,12 +223,12 @@ $(document).ready(function()
             itm_old = wphp_hide_on_data['visibility_name'] + '_old[' + key + ']';
             itm_old_esc = wphp_hide_on_data['visibility_name'] + '_old\\[' + key + '\\]';
             itm1 = wphp_hide_on_data['visibility_name'] + '\\[' + key + '\\]';
-            data[itm_name] = $("[ name=" + itm_name_esc + "]").attr('checked') ? 1 : 0;
-            data[itm_old] = $("[ name=" + itm_old_esc + "]").val();
+            data[itm_name] = jQuery("[ name=" + itm_name_esc + "]").attr('checked') ? 1 : 0;
+            data[itm_old] = jQuery("[ name=" + itm_old_esc + "]").val();
             a = 1;
         }
         // save the data
-        $.ajax(
+        jQuery.ajax(
         {
             url: ajaxurl, // this is a variable that WordPress has already defined for us
             type: 'POST',

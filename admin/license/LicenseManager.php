@@ -21,7 +21,7 @@ class SCB_LicenseManager
         }
         if (is_null($encrypter))
         {
-            $encrypter = new Encryption();
+            $encrypter = new WP_Hide_Post_Encryption();
         }
         $this->items[$id] = new SCB_LicenseItem($store?$store:'http://scriptburn.com', $item_type, $item_name, $encrypter, $options);
         return $this->items[$id];
