@@ -14,7 +14,7 @@
  * - Does HMAC verification of source data
  *
  */
-class Encryption
+class WP_Hide_Post_Encryption
 {
 
     const METHOD = 'aes-256-cbc';
