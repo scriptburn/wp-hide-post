@@ -1031,7 +1031,7 @@ $current_v = isset($_GET['wphp_hidden_on']) ? $_GET['wphp_hidden_on'] : array();
         if (!$info)
         {
 
-            $obj_license    = scb_get_license(wp_hide_post()->info('id'));
+            $obj_license    = scb_get_license('wp-hide-post-pro');
             $args['action'] = 'wphp_footer';
             $args['page']   = $page;
             if (is_object($obj_license))

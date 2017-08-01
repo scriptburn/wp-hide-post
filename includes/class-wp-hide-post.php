@@ -418,7 +418,7 @@ class wp_hide_post
                 'setting_page_name' => $this->setting_menu_page(),
                 'support_callback'  => function ()
             {
-                    $obj_license   = scb_get_license($this->info('id'));
+                    $obj_license   = scb_get_license('wp-hide-post-pro');
                     $info          = array();
                     $info['price'] = "0";
                     if (is_object($obj_license))
@@ -432,8 +432,9 @@ class wp_hide_post
                     $info['price'] = 1;
                     if ($info['price'] > 0)
                 {
+
                         $output[] = '<h2>For WP hide post Pro users</h2>';
-                        if ($info['key'] && $info['license'] == 'valid')
+                        if (@$info['key'] && @$info['license'] == 'valid')
                     {
                             $subject = ("WP hide post Pro Support Request");
                             $body    = "";
@@ -453,7 +454,7 @@ class wp_hide_post
                     echo (implode("\n", $output));
                 },
             ));
-        if (wphp_ispro())
+                if ((defined('WPHP_PRO') && WPHP_PRO) || $this->info('id') == 'wp-hide-post-pro' )
         {
 
             scb_license_manager()->add(
