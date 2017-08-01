@@ -454,7 +454,7 @@ class wp_hide_post
                     echo (implode("\n", $output));
                 },
             ));
-                if ((defined('WPHP_PRO') && WPHP_PRO) || $this->info('id') == 'wp-hide-post-pro' )
+        if ((defined('WPHP_PRO') && WPHP_PRO) || $this->info('id') == 'wp-hide-post-pro')
         {
 
             scb_license_manager()->add(
