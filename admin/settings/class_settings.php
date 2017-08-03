@@ -55,7 +55,7 @@ if (!class_exists('wphp_settings'))
             $this->settings_api = new wphp_settingsAPICustom();
             add_action('init', array($this, 'init'));
 
-            add_action('admin_init', array($this, 'admin_init'),11);
+            add_action('admin_init', array($this, 'admin_init'), 11);
 
             add_action('wp_ajax_manage_license', array($this, 'manage_license'));
 
@@ -82,7 +82,7 @@ if (!class_exists('wphp_settings'))
                     $tab['label']           = isset($tab['label']) ? $tab['label'] : '';
                     $tab['label']           = $tab['label'] ? $tab['label'] : $tab['title'];
                     $tab['label']           = $tab['label'] ? $tab['label'] : $tab['id'];
-                    $tab['options']         = isset($tab['options']) ? (is_callable($tab['options']) ? call_user_func_array($tab['options'], array()) : $tab['options']) : array();
+                    $tab['options']         = isset($tab['options']) ? $tab['options'] : array();
                     $this->tabs[$tab['id']] = array('id' => $tab['id'], 'title' => $tab['title'], 'label' => $tab['label'], 'options' => $tab['options']);
                 }
             }
@@ -124,16 +124,6 @@ if (!class_exists('wphp_settings'))
                 }
 
                 $key = array_search($setting['name'], array_column(isset($this->settings[$tab]) && is_array($this->settings[$tab]) ? $this->settings[$tab] : array(), 'name'));
-
-                // check if the setting array index value are callable
-                foreach ($setting as $k => $v)
-                {
-                    if (is_callable($setting[$k]))
-                    {
-                        $setting[$k] = call_user_func_array($setting[$k], array());
-                    }
-
-                }
 
                 if ($key !== false)
                 {
