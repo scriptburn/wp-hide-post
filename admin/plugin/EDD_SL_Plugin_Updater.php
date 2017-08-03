@@ -96,7 +96,7 @@ class EDD_SL_Plugin_Updater
         {
 
             $version_info = $this->api_request('plugin_latest_version', array('slug' => $this->slug));
-            p_l($version_info);
+             
             if (false !== $version_info && is_object($version_info) && isset($version_info->new_version))
             {
 
