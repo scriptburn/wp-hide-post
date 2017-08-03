@@ -55,7 +55,7 @@ if (!class_exists('wphp_settings'))
             $this->settings_api = new wphp_settingsAPICustom();
             add_action('init', array($this, 'init'));
 
-            add_action('admin_init', array($this, 'admin_init'));
+            add_action('admin_init', array($this, 'admin_init'),11);
 
             add_action('wp_ajax_manage_license', array($this, 'manage_license'));
 
@@ -82,7 +82,7 @@ if (!class_exists('wphp_settings'))
                     $tab['label']           = isset($tab['label']) ? $tab['label'] : '';
                     $tab['label']           = $tab['label'] ? $tab['label'] : $tab['title'];
                     $tab['label']           = $tab['label'] ? $tab['label'] : $tab['id'];
-                    $tab['options']         = isset($tab['options']) ? $tab['options'] : array();
+                    $tab['options']         = isset($tab['options']) ? (is_callable($tab['options']) ? call_user_func_array($tab['options'], array()) : $tab['options']) : array();
                     $this->tabs[$tab['id']] = array('id' => $tab['id'], 'title' => $tab['title'], 'label' => $tab['label'], 'options' => $tab['options']);
                 }
             }
@@ -122,7 +122,18 @@ if (!class_exists('wphp_settings'))
                     unset($settings[$item]);
                     continue;
                 }
+
                 $key = array_search($setting['name'], array_column(isset($this->settings[$tab]) && is_array($this->settings[$tab]) ? $this->settings[$tab] : array(), 'name'));
+
+                // check if the setting array index value are callable
+                foreach ($setting as $k => $v)
+                {
+                    if (is_callable($setting[$k]))
+                    {
+                        $setting[$k] = call_user_func_array($setting[$k], array());
+                    }
+
+                }
 
                 if ($key !== false)
                 {
@@ -154,7 +165,7 @@ if (!class_exists('wphp_settings'))
             $this->license_fields = array();
 
             $licenses = apply_filters('scb_license_items', $licenses);
-      
+
             foreach ($licenses as $license)
             {
 
@@ -250,6 +261,7 @@ if (!class_exists('wphp_settings'))
         }
         public function admin_init()
         {
+
             //set the settings
 
             $this->settings_api->set_sections($this->get_settings_sections());
@@ -257,7 +269,7 @@ if (!class_exists('wphp_settings'))
             //initialize settings
             $this->settings_api->admin_init();
 
-            if (isset($_POST['option_page']) && isset($this->all_tabs[$_POST['option_page']]) && isset($this->all_tabs[@$_POST['option_page']]['options']['form']['pre_handler'])  && is_callable($this->all_tabs[@$_POST['option_page']]['options']['form']['pre_handler']))
+            if (isset($_POST['option_page']) && isset($this->all_tabs[$_POST['option_page']]) && isset($this->all_tabs[@$_POST['option_page']]['options']['form']['pre_handler']) && is_callable($this->all_tabs[@$_POST['option_page']]['options']['form']['pre_handler']))
             {
                 $ret = call_user_func_array($this->all_tabs[$_POST['option_page']]['options']['form']['pre_handler'], array($_POST));
             }
@@ -360,7 +372,7 @@ if (!class_exists('wphp_settings'))
             header('Content-Type: text/plain');
             header('Content-Disposition: attachment; filename="' . $filename . '"');
 
-          //  die(   wp_strip_all_tags($_POST['scb-sysinfo']);
+            //  die(   wp_strip_all_tags($_POST['scb-sysinfo']);
             die(wp_strip_all_tags($_POST['scb-sysinfo']));
         }
 

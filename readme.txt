@@ -4,7 +4,7 @@ Donate link: http://scriptburn.com/wp-hide-post/
 Tags: SEO,hide,show,visbility,privacy,customization,sitemap,filter
 Requires at least: 2.6
 Tested up to: 4.8
-Stable tag: 2.0.8
+Stable tag: 2.0.9
 License: GPLv2
 
 Control the visibility of items on your blog by making posts/pages hidden on some parts , while still visible in other parts and search engines.
@@ -111,6 +111,13 @@ Ditto. It will be deleted. If you had any existing data (if you had it active be
 
 == Changelog ==
 
+= 2.0.9 =
+*Release Date - 3 Aug 2017*
+
+Fix:A js bug that was causing post editor toolbar not appearing in admin panel
+Fix: Missing semicolon in a javascript
+Fix: A bug due to that not all custom post types were being displayed in plugin setting section(reported by William Goodwin) 
+
 = 2.0.8 =
 *Release Date - 1 Aug 2017*
 
@@ -208,3 +215,4 @@ Please visit the plugin page at [ScriptBurn.com](http://scriptburn.com/wp-hide-p
 
  == Upgrade Notice ==
  n/a
+1
