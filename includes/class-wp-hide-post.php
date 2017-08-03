@@ -214,7 +214,7 @@ class wp_hide_post
     private function define_admin_hooks()
     {
         $this->loader->add_filter('scb_license_items', $this->plugin_admin, 'register_plugin', 10);
-        $this->loader->add_action('init', $this->plugin_admin, 'register_setting_page');
+        $this->loader->add_action('admin_init', $this->plugin_admin, 'register_setting_page');
 
         //add our styles
         $this->loader->add_action('admin_enqueue_scripts', $this->plugin_admin, 'enqueue_styles');
@@ -411,6 +411,7 @@ class wp_hide_post
     }
     public function init()
     {
+        p_l("memory_get_usage1-".memory_get_usage(false));
         $this->settingManager = wphp_settings::instance(array
             (
                 'id'                => $this->info('id'),
@@ -418,6 +419,7 @@ class wp_hide_post
                 'setting_page_name' => $this->setting_menu_page(),
                 'support_callback'  => function ()
             {
+                p_l("memory_get_usage2-".memory_get_usage(false));
                     $obj_license   = scb_get_license('wp-hide-post-pro');
                     $info          = array();
                     $info['price'] = "0";
@@ -452,6 +454,8 @@ class wp_hide_post
                     }
                     $output[] = 'Please submit your questions  <a target="_blank" href="https://github.com/scriptburn/wp-hide-post">Here</a>';
                     echo (implode("\n", $output));
+                                    p_l("memory_get_usage3-".memory_get_usage(false));
+
                 },
             ));
         if ((defined('WPHP_PRO') && WPHP_PRO) || $this->info('id') == 'wp-hide-post-pro')

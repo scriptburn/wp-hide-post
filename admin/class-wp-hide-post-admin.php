@@ -69,7 +69,7 @@ class wp_hide_post_Admin
         $this->wp_hide_post = $wp_hide_post;
         $this->version      = $version;
         $this->license      = $license;
-        $this->post_types   =is_object($this->license) && $this->license->is_valid() ? wphp_get_setting('wphp_gen', 'wphp_post_types') : false;
+        $this->post_types   = is_object($this->license) && $this->license->is_valid() ? wphp_get_setting('wphp_gen', 'wphp_post_types') : false;
         if (!is_array($this->post_types))
         {
             $this->post_types = array('post', 'page');
@@ -266,7 +266,7 @@ HTML;
                 'short_label' => 'Feeds',
                 'description' => '',
             ),
-            
+
             'post_recent'   => array(
                 'label'        => wphp_('Hide in Wp Native Recent post widget.'),
                 'short_label'  => 'Recent post',
@@ -608,7 +608,7 @@ HTML;
 
     public function create_post_type()
     {
-        return ;
+        return;
         register_post_type('acme_product',
             array(
                 'labels'      => array(
@@ -644,13 +644,15 @@ HTML;
     }
     public function register_setting_page()
     {
-        
+
         $valid = is_object($this->license) && $this->license->is_valid();
         wp_hide_post()->settingManager()->register_tab(array('id' => 'wphp_gen', 'title' => 'General'));
         $options = array();
         foreach ((array) scb_custom_post_types() as $type => $detail)
         {
-            $detail         = (array) $detail;
+
+            $detail = (array) $detail;
+
             $options[$type] = array('text' => $detail['labels']->name);
             if (!$valid && !$detail['_builtin'])
             {
@@ -687,7 +689,7 @@ HTML;
     public function admin_menu()
     {
 
-        add_submenu_page('options-general.php', wphp_('WP Hide Post'), wphp_("WP Hide Post"), 'manage_options', wp_hide_post()->setting_menu_page(), array(wp_hide_post()->settingManager(), 'plugin_page'));
+        add_submenu_page('options-general.php', wphp_('WP Hide Post'), wphp_('WP Hide Post'), 'manage_options', wp_hide_post()->setting_menu_page(), array(wp_hide_post()->settingManager(), 'plugin_page'));
     }
     public function register_plugin($licenses)
     {
@@ -796,7 +798,7 @@ HTML;
     }
     public function display_custom_bulkedit($column_name, $post_type)
     {
-        if (  !wphp_get_setting('wphp_gen', 'show_in_bulkedit'))
+        if (!wphp_get_setting('wphp_gen', 'show_in_bulkedit'))
         {
             return;
         }
@@ -805,7 +807,7 @@ HTML;
     //render our  quick edit and bulk edit box
     public function display_custom_quickedit($column_name, $post_type)
     {
-        $valid =is_object($this->license) && $this->license->is_valid();
+        $valid = is_object($this->license) && $this->license->is_valid();
 
         if (!wphp_get_setting('wphp_gen', 'show_in_quickedit'))
         {
@@ -864,7 +866,7 @@ HTML;
             $allChecked = $detail['value'];
             $index++;
         }
-         $pro = '<div style="padding:10px;padding-bottom:0px"><a target="_blank"  style="color:red" href="http://scriptburn.com/wphp">For WP hide post Pro Users only</a></div>';
+        $pro = '<div style="padding:10px;padding-bottom:0px"><a target="_blank"  style="color:red" href="http://scriptburn.com/wphp">For WP hide post Pro Users only</a></div>';
         if ($post_type !== 'page')
         {
             $pre[] = '<script>(function($)
@@ -889,7 +891,7 @@ HTML;
         $post_type_obj = get_post_type_object($post_type);
 
         $title = sprintf(wphp_('%1$s Visibility'), ucwords($post_type_obj->labels->singular_name));
-        $html  = implode("\n", $pre) . implode("", $html) . ($valid?'':$pro);
+        $html  = implode("\n", $pre) . implode("", $html) . ($valid ? '' : $pro);
         require WPHP_PLUGIN_DIR . 'admin/partials/quick-edit-display.php';
 
     }
@@ -981,7 +983,7 @@ $current_v = isset($_GET['wphp_hidden_on']) ? $_GET['wphp_hidden_on'] : array();
     }
 
 // Filter the posts acording to selected filter in post list select box
-    public function query_posts_join_custom_filter($join,  $wp_query)
+    public function query_posts_join_custom_filter($join, $wp_query)
     {
 
         global $wpdb, $pagenow;

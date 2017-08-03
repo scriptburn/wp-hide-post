@@ -45,7 +45,7 @@ jQuery(document).ready(function()
             'post_id': post_id,
             'post_type': jQuery("#posts-filter [name='post_type']").val()
         };
-        var save_btn = jQuery('#edit-' + post_id).find('.inline-edit-save>.save')
+        var save_btn = jQuery('#edit-' + post_id).find('.inline-edit-save>.save');
         jQuery(save_btn).data('label', $(save_btn).val());
         jQuery(save_btn).val('loading..');
         jQuery(save_btn).attr('disabled', true);
