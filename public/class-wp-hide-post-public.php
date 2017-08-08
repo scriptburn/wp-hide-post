@@ -315,7 +315,7 @@ class wp_hide_post_Public
      * @param $join
      * @return unknown_type
      */
-    public function query_posts_join($join, &$wp_query)
+    public function query_posts_join($join, $wp_query)
     {
 
         if (isset($wp_query->query['wphp_inside_recent_post_sidebar']))
