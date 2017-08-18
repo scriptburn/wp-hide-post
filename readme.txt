@@ -112,7 +112,11 @@ Ditto. It will be deleted. If you had any existing data (if you had it active be
 == Changelog ==
 
 = 2.0.11 =
-*Release Date - 3 Aug 2017*
+*Release Date - 18 Aug 2017*
+
+Fixed a bug which was causing hide pages from menu not working
+Added option to hide post/pages/custom post types from search engines
+Added test cases
 
 
 = 2.0.10 =
