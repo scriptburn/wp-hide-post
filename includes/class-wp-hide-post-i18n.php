@@ -24,24 +24,27 @@
  * @subpackage wp_hide_post/includes
  * @author     ScriptBurn <support@scriptburn.com>
  */
-class wp_hide_post_i18n {
+if (!class_exists('wp_hide_post_i18n'))
+{
+    class wp_hide_post_i18n
+    {
 
+        /**
+         * Load the plugin text domain for translation.
+         *
+         * @since    1.2.2
+         */
+        public function load_plugin_textdomain()
+        {
 
-	/**
-	 * Load the plugin text domain for translation.
-	 *
-	 * @since    1.2.2
-	 */
-	public function load_plugin_textdomain() {
+            load_plugin_textdomain(
+                'wp-hide-post',
+                false,
+                dirname(dirname(plugin_basename(__FILE__))) . '/languages/'
+            );
 
-		load_plugin_textdomain(
-			'wp-hide-post',
-			false,
-			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
-		);
+        }
 
-	}
-
-
+    }
 
 }

@@ -116,13 +116,18 @@ if (!function_exists('_wphp_http_post'))
 }
 if (!function_exists('wphp_allowed_post_types'))
 {
-    function wphp_allowed_post_types($joined = false)
+    function wphp_allowed_post_types($joined = false, $exclude = "")
     {
         static $post_types, $post_types_joined;
         if (!$post_types)
         {
-            $post_types = wp_hide_post()->pluginAdmin()->allowedPostTypes();
-
+            $post_types = wp_hide_post::getInstance()->pluginAdmin()->allowedPostTypes();
+        }
+        if ($exclude)
+        {
+            $post_types = array_flip($post_types);
+            unset($post_types[$exclude]);
+            $post_types = array_keys($post_types);
         }
         if ($joined)
         {
@@ -144,7 +149,6 @@ if (!function_exists('wphp_is_applicable'))
         unset($types['page']);
         $ret   = 0;
         $types = array_flip($types);
-
         if (wphp_is_post_sidebar($wp_query))
         {
             //p_n(__LINE__);
@@ -172,7 +176,7 @@ if (!function_exists('wphp_is_applicable'))
 
             $ret = 0;
         }
-        p_l($ret);
+        p_l("wphp_is_applicable $item_type $ret");
         return $ret;
 
     }
@@ -190,7 +194,7 @@ if (!function_exists('wphp_is_demo'))
     function wphp_is_demo()
     {
 
-        return $_SERVER['HTTP_HOST'] == 'wphidepost.loc';
+        return @$_SERVER['HTTP_HOST'] == 'wphidepost.loc';
     }
 }
 if (!function_exists('wphp_get_setting'))
@@ -198,6 +202,7 @@ if (!function_exists('wphp_get_setting'))
     function wphp_get_setting($section, $option = false, $default = false)
     {
         static $default_setting;
+        $return =null;
         if (!$default_setting)
         {
             $default_setting = wphp_get_default_setting();
@@ -206,28 +211,47 @@ if (!function_exists('wphp_get_setting'))
 
         if (!$option)
         {
-            return $options;
+            $return= $options;
         }
         if (isset($options[$option]))
         {
-            return $options[$option];
+            $return= $options[$option];
         }
         elseif ($default)
         {
 
             if (isset($default_setting[$option]))
             {
-                return $default_setting[$option];
+                $return= $default_setting[$option];
             }
             else
             {
-                return null;
+                $return= null;
             }
         }
         else
         {
-            return null;
+            $return= null;
         }
+        //p_l("$section, $option");
+        //p_l($return);
+        return $return;
+    }
+}
+
+if (!function_exists('wphp_set_setting'))
+{
+    function wphp_set_setting($section, $option, $value)
+    {
+        $options = get_option($section);
+        if (!$options && !is_array($options))
+        {
+            $options = array();
+        }
+        $options[$option] = $value;
+
+        update_option($section, $options);
+        return $options;
     }
 }
 if (!function_exists('wphp_visibility_types'))
@@ -235,7 +259,7 @@ if (!function_exists('wphp_visibility_types'))
     function wphp_visibility_types($joined = false)
     {
         static $post_visibility_joined;
-        $post_visibility = wp_hide_post()->pluginAdmin()->get_post_visibility_types();
+        $post_visibility = wp_hide_post::getInstance()->pluginAdmin()->get_post_visibility_types();
         return $post_visibility;
         if ($joined)
         {
@@ -450,5 +474,5 @@ function scb_custom_post_types($output = 'objects')
 
 function wphp_ispro()
 {
-    return (defined('WPHP_PRO') && WPHP_PRO) || wp_hide_post()->info('id') == 'wp-hide-post-pro';
+    return (defined('WPHP_PRO') && WPHP_PRO) || wp_hide_post::getInstance()->info('id') == 'wp-hide-post-pro';
 }

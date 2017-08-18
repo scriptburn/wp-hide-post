@@ -4,7 +4,7 @@ Donate link: http://scriptburn.com/wp-hide-post/
 Tags: SEO,hide,show,visbility,privacy,customization,sitemap,filter
 Requires at least: 2.6
 Tested up to: 4.8
-Stable tag: 2.0.10
+Stable tag: 2.0.11
 License: GPLv2
 
 Control the visibility of items on your blog by making posts/pages hidden on some parts , while still visible in other parts and search engines.
@@ -110,6 +110,10 @@ Ditto. It will be deleted. If you had any existing data (if you had it active be
 
 
 == Changelog ==
+
+= 2.0.11 =
+*Release Date - 3 Aug 2017*
+
 
 = 2.0.10 =
 *Release Date - 3 Aug 2017*
