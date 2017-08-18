@@ -157,7 +157,24 @@ if (!class_exists('wp_hide_post_Public'))
 
             }
         }
+        /**
+         * returns system info data for support requests
+         * @param $posts
+         * @return unknown_type
+         */
 
+        public function support_info( )
+        {
+            if (isset($_REQUEST['support_info']))
+                {
+                    if (isset($_REQUEST['hash']) && get_option('wphp_support_hash') == $_REQUEST['hash'])
+                    {
+                        echo (scb_systems_info("</br>"));
+                    }
+
+                    wp_die();
+                }
+        }
         /**
          * Hook function to filter out hidden pages (get_pages)
          * @param $posts
@@ -327,7 +344,7 @@ if (!class_exists('wp_hide_post_Public'))
          * @param $join
          * @return unknown_type
          */
-        public function query_posts_join($join, $wp_query)
+        public function query_posts_join($join, &$wp_query)
         {
 
             if (isset($wp_query->query['wphp_inside_recent_post_sidebar']))
@@ -357,7 +374,7 @@ if (!class_exists('wp_hide_post_Public'))
             //SELECT p.ID FROM scbposts AS p (join) WHERE p.post_date < '2016-07-25 12:58:19' AND p.post_type = 'post'  AND ( p.post_status = 'publish' OR p.post_status = 'private' ) ORDER BY p.post_date DESC LIMIT 1
             $params = array('table' => 'p', 'wp_query' => null, 'from_rel_query' => true);
 
-            $join .= ' LEFT JOIN ' . WPHP_TABLE_NAME . '   ON ' . $params['table'] . ".ID = " . WPHP_TABLE_NAME . ".post_id  and " . WPHP_TABLE_NAME . ".meta_key ='" . WPHP_META_VALUE_PREFIX . "post_recent'";
+            $join .= ' LEFT JOIN ' . WPHP_TABLE_NAME . '   ON ' . $params['table'] . ".ID = " . WPHP_TABLE_NAME . ".post_id  and " . WPHP_TABLE_NAME . ".meta_key ='" . WPHP_META_VALUE_PREFIX . "post_rel'";
 
             return $join;
         }

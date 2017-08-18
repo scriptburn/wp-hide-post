@@ -42,10 +42,10 @@ class TestPosts extends WPBASE_UnitTestCase
         $hidden   = (int) $hidden;
         $showHide = "_" . $hidden;
 
-       // p_l($this->posts[$index . $showHide]);
-        $term     = get_term_by('name', $this->posts[$index . $showHide]['tags_input'][0], 'post_tag');
+        // p_l($this->posts[$index . $showHide]);
+        $term = get_term_by('name', $this->posts[$index . $showHide]['tags_input'][0], 'post_tag');
 //p_l($term);
-//exit();
+        //exit();
         $content = $this->get_page_content((get_tag_link($term->term_id)));
 
         return array($this->textBoundry($this->posts[$index . $showHide]), $content, $this->posts[$index . $showHide]);
@@ -227,10 +227,9 @@ class TestPosts extends WPBASE_UnitTestCase
 
         exit();
          */
-       
-        $posts              = $this->hidden_on_post_front('post_front', true);
 
-        /*
+        $posts = $this->hidden_on_post_front('post_front', true);
+
         $cat_posts          = $this->hidden_on_post_category('post_front', true);
         $tags_posts         = $this->hidden_on_post_tag('post_front', true);
         $author_posts       = $this->hidden_on_post_author('post_front', true);
@@ -239,13 +238,10 @@ class TestPosts extends WPBASE_UnitTestCase
         $feed_posts         = $this->hidden_on_post_feed('post_front', true);
         $recent_posts       = $this->hidden_on_post_recent('post_front', true);
         $searchengine_posts = $this->hidden_on_search_engine('post_front', true);
-        */
 
- 
         $this->assertNotContains($posts[0], $posts[1]['nonstatic'], 'Must be hidden on the front page(nonstatic)');
         $this->assertNotContains($posts[0], $posts[1]['static'], 'Must be hidden  on the front page(static)');
 
-        return;
         $this->assertContains($cat_posts[0], $cat_posts[1], 'Must be visible on the category page');
         $this->assertContains($tags_posts[0], $tags_posts[1], 'Must be visible on the tag page');
         $this->assertContains($author_posts[0], $author_posts[1], 'Must be visible on the author page');
@@ -258,7 +254,7 @@ class TestPosts extends WPBASE_UnitTestCase
 
     }
 
-    public function ttest_hidden_on_post_category()
+    public function test_hidden_on_post_category()
     {
         $index = 'post_category';
 
@@ -289,7 +285,7 @@ class TestPosts extends WPBASE_UnitTestCase
         $this->assertTrue($searchengine_posts[0][3] != 'robots' && $searchengine_posts[0][6] != 'noindex', 'Must be visible in search engine');
 
     }
-    public function ttest_hidden_on_post_tag()
+    public function test_hidden_on_post_tag()
     {
         $index = 'post_tag';
 
@@ -321,7 +317,7 @@ class TestPosts extends WPBASE_UnitTestCase
 
     }
 
-    public function ttest_hidden_on_post_author()
+    public function test_hidden_on_post_author()
     {
         $index = 'post_author';
 
@@ -355,7 +351,7 @@ class TestPosts extends WPBASE_UnitTestCase
 
     }
 
-    public function ttest_hidden_on_post_archive()
+    public function test_hidden_on_post_archive()
     {
         $index         = 'post_archive';
         $archive_posts = $this->hidden_on_post_archive($index, true);
@@ -390,7 +386,7 @@ class TestPosts extends WPBASE_UnitTestCase
 
     }
 
-    public function ttest_hidden_on_post_search()
+    public function test_hidden_on_post_search()
     {
         $index        = 'post_search';
         $search_posts = $this->hidden_on_post_search($index, true);
@@ -426,7 +422,7 @@ class TestPosts extends WPBASE_UnitTestCase
 
     }
 
-    public function ttest_hidden_on_post_feed()
+    public function test_hidden_on_post_feed()
     {
         $index      = 'post_feed';
         $feed_posts = $this->hidden_on_post_feed($index, true);
@@ -462,7 +458,7 @@ class TestPosts extends WPBASE_UnitTestCase
 
     }
 
-    public function ttest_hidden_on_post_recent()
+    public function test_hidden_on_post_recent()
     {
         $index = 'post_recent';
 
@@ -500,7 +496,7 @@ class TestPosts extends WPBASE_UnitTestCase
 
     }
 
-    public function ttest_hidden_on_search_engine()
+    public function test_hidden_on_search_engine()
     {
         $index              = 'no_index';
         $searchengine_posts = $this->hidden_on_search_engine($index, true);

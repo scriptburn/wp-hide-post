@@ -289,20 +289,6 @@ if (!class_exists('wp_hide_post'))
             //Check if we need to update database
             $this->loader->add_action('plugins_loaded', $this->plugin_admin, 'maybe_update', 1);
 
-            //returns system info data for support reques
-            add_action('plugins_loaded', function ()
-            {
-                if (isset($_REQUEST['support_info']))
-                {
-                    if (isset($_REQUEST['hash']) && get_option('wphp_support_hash') == $_REQUEST['hash'])
-                    {
-                        echo (scb_systems_info("</br>"));
-                    }
-
-                    wp_die();
-                }
-            }, 1);
-
             //$theme_item = new SCB_Item_Helper($this->store, $this->item_file_name, $this->get_license_key(), $this->item_type);
 
         }
@@ -368,6 +354,11 @@ if (!class_exists('wp_hide_post'))
             $this->loader->add_filter('wp_get_nav_menu_items', $plugin_public, 'wp_get_nav_menu_items', null, 3);
 
             $this->loader->add_action('wp_head', $plugin_public, 'add_noindex');
+
+            //returns system info data for support requests
+
+            $this->loader->add_action('plugins_loaded', $plugin_public, 'support_info', 1);
+
             if (wphp_is_demo())
             {
                 add_filter('pre_get_posts', function ($query)

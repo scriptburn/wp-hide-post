@@ -115,7 +115,9 @@ Ditto. It will be deleted. If you had any existing data (if you had it active be
 *Release Date - 18 Aug 2017*
 
 Fixed a bug which was causing hide pages from menu not working
-Added option to hide post/pages/custom post types from search engines
+Fixed a bug which was causing hide post in next previous rel link not working
+Fixed a bug where parameter to a filter was not being passed by reference 
+Added option to hide pages from search engines
 Added test cases
 
 
