@@ -128,7 +128,7 @@ if (!class_exists('wphp_settingsAPICustom'))
                 $size .= ' ' . $args['class'];
             }
             $html = sprintf('<select  class="%1$s" name="%2$s[%3$s]%6$s" id="%2$s[%3$s]"  %4$s %5$s>', $size, $args['section'], $args['id'], isset($args['multiple']) ? 'multiple' : '', empty($args['placeholder']) ? '' : 'data-placeholder="' . $args['placeholder'] . '"', isset($args['multiple']) ? '[]' : '');
-
+ $args['options']=is_callable($args['options'])?call_user_func_array($args['options'], array()):$args['options'];
             foreach ($args['options'] as $key => $label)
             {
                 $extra = '';
@@ -213,7 +213,9 @@ if (!class_exists('wphp_settingsAPICustom'))
             $html='';
             if(wphp_settings::instance()->options('page_title'))
             {
-                $html="<h1>".wphp_settings::instance()->options('page_title')."</h1>";
+                 
+                $html="<h1>".(is_callable(wphp_settings::instance()->options('page_title')) ?call_user_func_array(wphp_settings::instance()->options('page_title'),array()) :wphp_settings::instance()->options('page_title') )."</h1>";
+
             }
             $html .= '<h2 class="nav-tab-wrapper scb-set-nav">';
 

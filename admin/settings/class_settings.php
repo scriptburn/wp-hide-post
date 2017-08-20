@@ -83,6 +83,7 @@ if (!class_exists('wphp_settings'))
                     $tab['label']           = $tab['label'] ? $tab['label'] : $tab['title'];
                     $tab['label']           = $tab['label'] ? $tab['label'] : $tab['id'];
                     $tab['options']         = isset($tab['options']) ? $tab['options'] : array();
+                    
                     $this->tabs[$tab['id']] = array('id' => $tab['id'], 'title' => $tab['title'], 'label' => $tab['label'], 'options' => $tab['options']);
                 }
             }

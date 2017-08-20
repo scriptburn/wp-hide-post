@@ -6,12 +6,17 @@ if (!defined('OPENSSL_RAW_DATA'))
 {
     define('OPENSSL_RAW_DATA', 1);
 }
-
-function scb_license_manager()
+if (!function_exists('scb_license_manager'))
 {
-    return SCB_LicenseManager::getInstance();
+    function scb_license_manager()
+    {
+        return SCB_LicenseManager::getInstance();
+    }
 }
-function scb_get_license($item)
+if (!function_exists('scb_get_license'))
 {
-    return scb_license_manager()->item($item);
+    function scb_get_license($item)
+    {
+        return scb_license_manager()->item($item);
+    }
 }
