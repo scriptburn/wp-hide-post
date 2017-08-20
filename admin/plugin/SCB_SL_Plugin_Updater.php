@@ -9,7 +9,7 @@
  * @author Pippin Williamson
  * @version 1.6
  */
-class EDD_SL_Plugin_Updater
+class SCB_SL_Plugin_Updater
 {
     private $api_url  = '';
     private $api_data = array();
@@ -200,7 +200,7 @@ class EDD_SL_Plugin_Updater
             $wp_list_table = _get_list_table('WP_Plugins_List_Table');
             echo '<tr class="plugin-update-tr"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange"><div class="update-message">';
 
-            $changelog_link = self_admin_url('index.php?edd_sl_action=view_plugin_changelog&plugin=' . $this->name . '&slug=' . $this->slug . '&TB_iframe=true&width=772&height=911');
+            $changelog_link = self_admin_url('index.php?scb_sl_action=view_plugin_changelog&plugin=' . $this->name . '&slug=' . $this->slug . '&TB_iframe=true&width=772&height=911');
 
             if (empty($version_info->download_link))
             {
@@ -354,7 +354,7 @@ class EDD_SL_Plugin_Updater
     public function show_changelog()
     {
 
-        if (empty($_REQUEST['edd_sl_action']) || 'view_plugin_changelog' != $_REQUEST['edd_sl_action'])
+        if (empty($_REQUEST['scb_sl_action']) || 'view_plugin_changelog' != $_REQUEST['scb_sl_action'])
         {
             return;
         }

@@ -20,17 +20,22 @@
  * @subpackage wp_hide_post/includes
  * @author     ScriptBurn <support@scriptburn.com>
  */
-class wp_hide_post_Deactivator {
+if (!class_exists('wp_hide_post_Deactivator'))
+{
+    class wp_hide_post_Deactivator
+    {
 
-	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
-	 *
-	 * @since    1.2.2
-	 */
-	public   function deactivate() {
+        /**
+         * Short Description. (use period)
+         *
+         * Long Description.
+         *
+         * @since    1.2.2
+         */
+        public function deactivate()
+        {
 
-	}
+        }
 
+    }
 }

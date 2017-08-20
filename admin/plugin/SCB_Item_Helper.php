@@ -167,7 +167,7 @@ if (!class_exists('SCB_Item_Helper'))
             );
             //$this->debug('license', __FUNCTION__ . "-" . __LINE__, 'plugin_updater');
 
-            $updater = new EDD_SL_Plugin_Updater($this->store, $this->item_file_name, $plugin_conf);
+            $updater = new SCB_SL_Plugin_Updater($this->store, $this->item_file_name, $plugin_conf);
         }
 
         public function theme_updater()
@@ -182,7 +182,7 @@ if (!class_exists('SCB_Item_Helper'))
                 'author'         => $theme_data->Author,
                 'url'            => home_url(),
             );
-            $edd_updater = new EDD_SL_Theme_Updater($theme_conf);
+            $edd_updater = new SCB_SL_Theme_Updater($theme_conf);
         }
 
     }
