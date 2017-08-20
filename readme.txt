@@ -117,6 +117,7 @@ Ditto. It will be deleted. If you had any existing data (if you had it active be
 Fixed a bug which was causing hide pages from menu not working
 Fixed a bug which was causing hide post in next previous rel link not working
 Fixed a bug where parameter to a filter was not being passed by reference 
+Fixed a path related bug that was throwing error when activating plugin on windows platform
 Added option to hide pages from search engines
 Added test cases
 

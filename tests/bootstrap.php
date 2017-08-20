@@ -23,7 +23,7 @@ function _manually_load_plugin()
     require dirname(dirname(__FILE__)) . '/wp-hide-post.php';
 }
 tests_add_filter('muplugins_loaded', '_manually_load_plugin');
-
+define('RUNNING_WPHP_UNIT_TEST',1);
 // Start up the WP testing environment.
 require $_tests_dir . '/includes/bootstrap.php';
 require __DIR__ . '/../bin/trait_exec.php';

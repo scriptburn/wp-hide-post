@@ -332,7 +332,15 @@ if (!class_exists('wp_hide_post'))
             $this->loader->add_filter('posts_where_paged', $plugin_public, 'query_posts_where', 10, 2);
 
             //add join clauss in main filter query
-            $this->loader->add_filter('posts_join_paged', $plugin_public, 'query_posts_join', 10, 2);
+            if(defined('RUNNING_WPHP_UNIT_TEST') && RUNNING_WPHP_UNIT_TEST)
+            {
+                $this->loader->add_filter('posts_join_paged', $plugin_public, 'query_posts_join_unit', 10, 2);
+            }
+            else
+            {
+                $this->loader->add_filter('posts_join_paged', $plugin_public, 'query_posts_join', 10, 2);
+
+            }
 
             $this->loader->add_filter('widget_posts_args', $plugin_public, 'widget_posts_args');
 

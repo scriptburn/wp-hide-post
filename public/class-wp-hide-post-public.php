@@ -163,17 +163,17 @@ if (!class_exists('wp_hide_post_Public'))
          * @return unknown_type
          */
 
-        public function support_info( )
+        public function support_info()
         {
             if (isset($_REQUEST['support_info']))
+            {
+                if (isset($_REQUEST['hash']) && get_option('wphp_support_hash') == $_REQUEST['hash'])
                 {
-                    if (isset($_REQUEST['hash']) && get_option('wphp_support_hash') == $_REQUEST['hash'])
-                    {
-                        echo (scb_systems_info("</br>"));
-                    }
-
-                    wp_die();
+                    echo (scb_systems_info("</br>"));
                 }
+
+                wp_die();
+            }
         }
         /**
          * Hook function to filter out hidden pages (get_pages)
@@ -340,13 +340,42 @@ if (!class_exists('wp_hide_post_Public'))
             return $join;
         }
         /**
+         * add join clauss in main filter query
          *
-         * @param $join
-         * @return unknown_type
+         * @since    1.2.2
          */
+
         public function query_posts_join($join, &$wp_query)
         {
+            if (isset($wp_query->query['wphp_inside_recent_post_sidebar']))
+            {
+                //p_n($wp_query);
+            }
 
+            // p_n("called: wphp_query_posts_join");
+            if (wphp_is_applicable('post', $wp_query) && wphp_is_applicable('page', $wp_query))
+            {
+
+                if (!$join)
+                {
+                    $join = '';
+                }
+                $params = array('table' => WP_POSTS_TABLE_NAME, 'wp_query' => $wp_query);
+                $join .= $this->get_exclude_join($params);
+
+            }
+
+            return $join;
+        }
+
+        /**
+         * add join clauss in main filter query ,This partiucular function only runs when runnign in unit test, Needed to create seperate function due to weird phpunit bug that was throwing warning "Parameter 2 to wp_hide_post_Public::query_posts_join() expected to be a reference, value given" only when running in unit tests
+         *
+         * @since    2.0.11
+         */
+
+        public function query_posts_join_unit($join, $wp_query)
+        {
             if (isset($wp_query->query['wphp_inside_recent_post_sidebar']))
             {
                 //p_n($wp_query);
@@ -404,7 +433,7 @@ if (!class_exists('wp_hide_post_Public'))
 
             if ($front || is_archive())
             {
-                 $query->set('post_type', wphp_allowed_post_types());
+                $query->set('post_type', wphp_allowed_post_types());
 
             }
             //endif;

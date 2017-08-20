@@ -36,10 +36,13 @@ if (!defined('WPHP_VER'))
     define('WPHP_VER', "2.0.11");
     define('WPHP_DB_VER', "2");
 
-    define('WPHP_PLUGIN_DIR', __DIR__ . "/");
-    define('WPHP_PLUGIN_FILE', __FILE__);
-
+    define('WPHP_PLUGIN_DIR', __DIR__ . DIRECTORY_SEPARATOR);
+    define('WPHP_PLUGIN_FILE',  ltrim(str_replace(str_Replace("/",DIRECTORY_SEPARATOR,WP_PLUGIN_DIR),"",__FILE__),DIRECTORY_SEPARATOR) );
     define('WPHP_PLUGIN_URL', plugin_dir_url(WPHP_PLUGIN_FILE));
+
+ 
+
+
 
     define('WPHP_TABLE_NAME', "${table_prefix}postmeta");
 
