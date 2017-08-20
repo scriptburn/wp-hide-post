@@ -74,7 +74,7 @@ if (!class_exists('wp_hide_post_Admin'))
             $this->post_types   = is_object($this->license) && $this->license->is_valid() ? wphp_get_setting('wphp_gen', 'wphp_post_types') : false;
             if (!is_array($this->post_types))
             {
-                $this->post_types = array('post', 'page');
+                $this->post_types = array('post', 'page','acme_product');
             }
 
             return $this;
@@ -335,7 +335,7 @@ HTML;
 
         public function get_visibility_types($post_type)
         {
-            if ($post_type == 'page' || $post_type == 'post')
+           // if ($post_type == 'page' || $post_type == 'post')
             {
                 if ($post_type == 'page')
                 {
@@ -705,43 +705,47 @@ HTML;
         public function register_setting_page()
         {
 
-            $valid = is_object($this->license) && $this->license->is_valid();
             wp_hide_post::getInstance()->settingManager()->register_tab(array('id' => 'wphp_gen', 'title' => 'General'));
-            $options = array();
-            foreach ((array) scb_custom_post_types() as $type => $detail)
-            {
 
-                $detail = (array) $detail;
-
-                $options[$type] = array('text' => $detail['labels']->name);
-                if (!$valid && !$detail['_builtin'])
-                {
-                    $options[$type]['extra'] = 'disabled';
-                    $options[$type]['text'] .= " -- For WP hide post Pro users only";
-                }
-            }
-            $pro = '<div><a target="_blank"  style="color:red" href="http://scriptburn.com/wphp">For WP hide post Pro Users only</a></div>';
+            $pro = sprintf('<div><a target="_blank"  style="color:red" href="http://scriptburn.com/wphp">For %1$s Users only</a></div>', wphp_pro_text(true));
             wp_hide_post::getInstance()->settingManager()->register_setting_field('wphp_gen', array(
                 array('name'  => 'wphp_post_types',
                     'label'       => wphp_('Allowed custom post types'),
-                    'desc'        => wphp_('Allow WP hide post widget in these custom post types'),
+                    'desc'        => sprintf(wphp_('Allow %1$s widget in these custom post types'), wphp_title_text()),
                     'type'        => 'multi',
-                    'options'     => $options,
+                    'options'     => function ()
+                    {
+
+                        $options = array();
+                        foreach ((array) scb_custom_post_types() as $type => $detail)
+                        {
+
+                            $detail = (array) $detail;
+
+                            $options[$type] = array('text' => $detail['labels']->name);
+                            if (!wphp_ispro() && !$detail['_builtin'])
+                            {
+                                $options[$type]['extra'] = 'disabled';
+                                $options[$type]['text'] .= sprintf(' -- For %1$s users only', wphp_title_text(false));
+                            }
+                        }
+                        return $options;
+                    },
                     'placeholder' => 'Select custom post type',
                 ),
                 array('name' => 'show_in_quickedit',
                     'label'      => wphp_('Enable quick edit?'),
-                    'desc'       => wphp_('Display WP hide post widget in quick edit?') . ($valid ? '' : $pro),
+                    'desc'       => sprintf(wphp_('Display %1$s widget in quick edit?'), wphp_title_text()) . (wphp_ispro() ? '' : $pro),
                     'type'       => 'yesno',
                     'default'    => 1,
-                    'disabled'   => $valid ? '' : 'disabled',
+                    'disabled'   => wphp_ispro() ? '' : 'disabled',
                 ),
                 array('name' => 'show_in_bulkedit',
                     'label'      => wphp_('Enable bulk edit?'),
-                    'desc'       => wphp_('Display WP hide post widget in bulk edit?') . ($valid ? '' : $pro),
+                    'desc'       => sprintf(wphp_('Display %1$s widget in bulk edit?'), wphp_title_text()) . (wphp_ispro() ? '' : $pro),
                     'type'       => 'yesno',
                     'default'    => 1,
-                    'disabled'   => $valid ? '' : 'disabled',
+                    'disabled'   => wphp_ispro() ? '' : 'disabled',
                 ),
             ));
         }
@@ -749,14 +753,15 @@ HTML;
         public function admin_menu()
         {
 
-            add_submenu_page('options-general.php', wphp_('WP Hide Post'), wphp_('WP Hide Post'), 'manage_options', wp_hide_post::getInstance()->setting_menu_page(), array(wp_hide_post::getInstance()->settingManager(), 'plugin_page'));
+            add_submenu_page('options-general.php', wphp_title_text(false), wphp_title_text(false), 'manage_options', wp_hide_post::getInstance()->setting_menu_page(), array(wp_hide_post::getInstance()->settingManager(), 'plugin_page'));
         }
         public function register_plugin($licenses)
         {
+
             $licenses[] = array('id' => 'wp-hide-post-pro',
                 'type'                   => 'plugin',
                 'name'                   => 'WP Hide Post Pro',
-                'label'                  => 'WP hide Post Plugin',
+                'label'                  => wphp_title_text().' Plugin',
                 'options'                => array(
                     'license_text' => array('invalid' => 'Get your WP Hide Post Pro license from here <a href="http://scriptburn.com/wphp" target="_blank">here</a>'),
                     'store_url'    => "http://scriptburn.com",
@@ -1198,6 +1203,10 @@ $current_v = isset($_GET['wphp_hidden_on']) ? $_GET['wphp_hidden_on'] : array();
             {
                 set_transient('wphp_db_updated', 1, 30);
             }
+        }
+        public function license()
+        {
+            return $this->license;
         }
 
     }

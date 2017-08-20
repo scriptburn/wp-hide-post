@@ -146,6 +146,7 @@ if (!function_exists('wphp_is_applicable'))
     {
 
         $types = array_flip(wphp_allowed_post_types());
+         
         unset($types['page']);
         $ret   = 0;
         $types = array_flip($types);
@@ -202,7 +203,7 @@ if (!function_exists('wphp_get_setting'))
     function wphp_get_setting($section, $option = false, $default = false)
     {
         static $default_setting;
-        $return =null;
+        $return = null;
         if (!$default_setting)
         {
             $default_setting = wphp_get_default_setting();
@@ -211,27 +212,27 @@ if (!function_exists('wphp_get_setting'))
 
         if (!$option)
         {
-            $return= $options;
+            $return = $options;
         }
         if (isset($options[$option]))
         {
-            $return= $options[$option];
+            $return = $options[$option];
         }
         elseif ($default)
         {
 
             if (isset($default_setting[$option]))
             {
-                $return= $default_setting[$option];
+                $return = $default_setting[$option];
             }
             else
             {
-                $return= null;
+                $return = null;
             }
         }
         else
         {
-            $return= null;
+            $return = null;
         }
         //p_l("$section, $option");
         //p_l($return);
@@ -471,8 +472,29 @@ function scb_custom_post_types($output = 'objects')
     return empty($types) || !is_array($types) ? array() : $types;
 
 }
-
-function wphp_ispro()
+function wphp_pro_text($sup = true)
 {
-    return (defined('WPHP_PRO') && WPHP_PRO) || wp_hide_post::getInstance()->info('id') == 'wp-hide-post-pro';
+
+    return wp_hide_post::getInstance()->info('title') . ($sup ? " <sup style='color:green;'>pro</sup> " : ' pro');
+}
+function wphp_ispro($sup = true)
+{
+    static $pro;
+    if (is_null($pro))
+    {
+        $pro = (defined('WPHP_PRO') && WPHP_PRO && wp_hide_post::getInstance()->pluginAdmin()->license() && wp_hide_post::getInstance()->pluginAdmin()->license()->is_valid());
+    }
+    return $pro ? wphp_pro_text($sup) : false;
+
+    return $pro;
+}
+function wphp_title_text($sup = true)
+{
+    static $text;
+    if (!isset($text[(int) $sup]) || is_null($text[(int) $sup]))
+    {
+        $text[(int) $sup] = wphp_ispro($sup);
+        $text[(int) $sup] = $text[(int) $sup] ? $text[(int) $sup] : wp_hide_post::getInstance()->info('title');
+    }
+    return $text[(int) $sup];
 }

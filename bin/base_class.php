@@ -23,11 +23,13 @@ class WPBASE_UnitTestCase extends WP_UnitTestCase
     public function setUp()
     {
         parent::setUp();
-        wphp_set_setting('wphp_gen', 'wphp_post_types', array('post', 'page'));
+        wphp_set_setting('wphp_gen', 'wphp_post_types', $this->valid_post_types());
 
         $this->currentUser = self::factory()->user->create(array('role' => 'administrator'));
 
         wp_set_current_user($this->currentUser);
+        $this->wphp_create_post_type();
+        //add_action('init', array($this, 'wphp_create_post_type'), 1);
 
         add_shortcode('pw_sample', array($this, 'shortcode_render_items_home_page'), 10, 3);
         add_action('pre_get_posts', array($this, 'action_display_all_posts'), 1);
@@ -35,6 +37,48 @@ class WPBASE_UnitTestCase extends WP_UnitTestCase
         // for displaying all posts in feed page
         add_filter('post_limits', array($this, 'filter_set_no_limit'), 10, 2);
 
+    }
+    public function valid_post_types()
+    {
+        return array('post', 'page', 'acme_product', 'item');
+    }
+    public function wphp_create_post_type()
+    {
+        register_post_type('acme_product',
+            array(
+                'labels'      => array(
+                    'name'          => __('Products'),
+                    'singular_name' => __('Product'),
+                ),
+                'public'      => true,
+                'has_archive' => true,
+                'taxonomies' => array('post_tag','category'),
+            )
+        );
+
+        register_post_type('acme_item',
+            array(
+                'labels'      => array(
+                    'name'          => __('Items'),
+                    'singular_name' => __('Item'),
+                ),
+                'public'      => true,
+                'has_archive' => true,
+                'taxonomies' => array('post_tag','category'),
+            )
+        );
+
+        register_post_type('acme_test',
+            array(
+                'labels'      => array(
+                    'name'          => __('Tests'),
+                    'singular_name' => __('Test'),
+                ),
+                'public'      => true,
+                'has_archive' => true,
+                'taxonomies' => array('post_tag'),
+            )
+        );
     }
     public function filter_set_no_limit($limit, $query)
     {
@@ -47,8 +91,7 @@ class WPBASE_UnitTestCase extends WP_UnitTestCase
     }
     public function action_display_all_posts($query)
     {
-        $query->set( 'post_type', array(
-'post', 'page' ) );
+        $query->set('post_type', $this->valid_post_types());
         // no affect on admin or other queries
         if (is_admin() || !$query->is_main_query())
         {
@@ -68,7 +111,7 @@ class WPBASE_UnitTestCase extends WP_UnitTestCase
 
         p_l("in short code");
 
-        $query_opt = array('posts_per_page' => -1, 'post_type' => ['page', 'post'], 'orderby' => 'ID');
+        $query_opt = array('posts_per_page' => -1, 'post_type' => $this->valid_post_types(), 'orderby' => 'ID');
         if ($this->staticPage)
         {
             $query_opt['post__not_in'] = array($this->staticPage);
@@ -133,6 +176,7 @@ class WPBASE_UnitTestCase extends WP_UnitTestCase
                     'post_title'    => "{$loop_index} title",
                     'post_category' => array($my_cat_id, $common_cat_id),
                     'tags_input'    => array("{$loop_index}_tag"),
+                    'post_type'     => $post_type,
 
                 ];
 
@@ -214,29 +258,25 @@ class WPBASE_UnitTestCase extends WP_UnitTestCase
 
                     if (empty($post['post_type']))
                     {
-                        $post['post_type'] =$common['post_type'];
-                        $post['post_status'] =$common['post_status'];
+                        $post['post_type']   = $common['post_type'];
+                        $post['post_status'] = $common['post_status'];
 
-
-                          
                     }
                     if (empty($post['post_status']))
                     {
-                         $post['post_status'] =$common['post_status'];
+                        $post['post_status'] = $common['post_status'];
 
-
-                          
                     }
                     if (empty($post['post_content']))
                     {
                         $post['post_content'] = $post['post_title'];
                     }
- 
+
                     if (isset($post['extra']))
                     {
                         $_POST["wphp_" . $post['post_type'] . "_edit_nonce"] = wp_create_nonce("wphp_" . $post['post_type'] . "_edit_nonce");
                     }
-                    if ($post['post_type'] == 'page')
+                    if ($post['post_type'] != 'post')
                     {
                         $post['tax_input']['post_tag'] = $post['tags_input'];
                         //         $post['tax_input']['category']=$post['post_tag'];
@@ -244,15 +284,17 @@ class WPBASE_UnitTestCase extends WP_UnitTestCase
                     }
 
                     $this->posts[$index] = $post;
- 
+
                     $post_id = wp_insert_post($this->posts[$index]);
                     if (is_wp_error($post_id))
                     {
                         throw new Exception($post_id->get_error_message());
                     }
-                    if ($this->posts[$index]['post_type'] == 'page')
+                    if ($this->posts[$index]['post_type'] != 'post')
                     {
                         wp_set_object_terms($post_id, $this->posts[$index]['post_category'], 'category');
+                        wp_set_object_terms($post_id, $this->posts[$index]['post_category'], 'category');
+
 
                     }
                     p_l("Created " . $post['post_type'] . ":" . $post['post_title'] . "@" . $post_id);
@@ -290,11 +332,11 @@ class WPBASE_UnitTestCase extends WP_UnitTestCase
             }
 
             $posts[$loop_index] = [
-                'post_title' => "{$loop_index} title",
-                'tags_input' => array("{$loop_index}_tag"),
-                'post_type'  => $post_type,
-                'auto'       => 1,
-                'post_status'=>'publish'
+                'post_title'  => "{$loop_index} title",
+                'tags_input'  => array("{$loop_index}_tag"),
+                'post_type'   => $post_type,
+                'auto'        => 1,
+                'post_status' => 'publish',
 
             ];
             $posts[$loop_index]['post_category'] = array($my_cat_id, $common_cat_id);
@@ -334,7 +376,7 @@ class WPBASE_UnitTestCase extends WP_UnitTestCase
     }
     public function set_static_home_page($boolTrue)
     {
-        p_l("setting static home page:".($boolTrue?'yes':'no'));
+        p_l("setting static home page:" . ($boolTrue ? 'yes' : 'no'));
         if (!$this->staticPage && $boolTrue)
         {
             $this->staticPage = $this->factory->post->create(['post_type' => 'page', 'post_title' => 'I am static home page', 'post_content' => "[pw_sample]"]);
@@ -403,6 +445,81 @@ class WPBASE_UnitTestCase extends WP_UnitTestCase
 
         return $id ? $next_post->ID : (array) $next_post;
 
+    }
+
+    public function get_terms_by_post_type($post_type, $taxonomy, $fields = 'all', $args)
+    {
+        $q_args = array(
+            'post_type'      => (array) $post_type,
+            'posts_per_page' => -1,
+        );
+        $the_query = new WP_Query($q_args);
+
+        $terms = array();
+
+        while ($the_query->have_posts())
+        {
+            $the_query->the_post();
+
+            global $post;
+
+            $current_terms = get_the_terms($post->ID, $taxonomy);
+p_d($current_terms);
+            foreach ($current_terms as $t)
+            {
+                //avoid duplicates
+                if (!in_array($t, $terms))
+                {
+                    $t->count = 1;
+                    $terms[]  = $t;
+                }
+                else
+                {
+                    $key                = array_search($t, $terms);
+                    $terms[$key]->count = $terms[$key]->count + 1;
+                }
+            }
+        }
+        wp_reset_query();
+
+        //return array of term objects
+        if ($fields == "all")
+        {
+            return $terms;
+        }
+
+        //return array of term ID's
+        if ($fields == "ID")
+        {
+            foreach ($terms as $t)
+            {
+                $re[] = $t->term_id;
+            }
+            return $re;
+        }
+        //return array of term names
+        if ($fields == "name")
+        {
+            foreach ($terms as $t)
+            {
+                $re[] = $t->name;
+            }
+            return $re;
+        }
+        // get terms with get_terms arguments
+        if ($fields == "get_terms")
+        {
+            $terms2 = get_terms($taxonomy, $args);
+
+            foreach ($terms as $t)
+            {
+                if (in_array($t, $terms2))
+                {
+                    $re[] = $t;
+                }
+            }
+            return $re;
+        }
     }
 
 }

@@ -224,7 +224,7 @@ if (!class_exists('wp_hide_post'))
         private function define_admin_hooks()
         {
             $this->loader->add_filter('scb_license_items', $this->plugin_admin, 'register_plugin', 10);
-            $this->loader->add_action('admin_init', $this->plugin_admin, 'register_setting_page');
+            $this->loader->add_action('plugins_loaded', $this->plugin_admin, 'register_setting_page');
 
             //add our styles
             $this->loader->add_action('admin_enqueue_scripts', $this->plugin_admin, 'enqueue_styles');
@@ -459,10 +459,11 @@ if (!class_exists('wp_hide_post'))
         }
         public function init()
         {
+             
             $this->settingManager = wphp_settings::instance(array
                 (
                     'id'                => $this->info('id'),
-                    'page_title'        => $this->info('title') . " settings",
+                    'page_title'        => function (){ return wphp_title_text();},
                     'setting_page_name' => $this->setting_menu_page(),
                     'support_callback'  => function ()
                 {
@@ -481,10 +482,10 @@ if (!class_exists('wp_hide_post'))
                         if ($info['price'] > 0)
                     {
 
-                            $output[] = '<h2>For WP hide post Pro users</h2>';
+                            $output[] = sprintf('<h2>For %1$s users</h2>',wphp_pro_text());
                             if (@$info['key'] && @$info['license'] == 'valid')
                         {
-                                $subject = ("WP hide post Pro Support Request");
+                                $subject = sprintf('%1$s Support Request',wphp_pro_text());
                                 $body    = "";
                                 $body .= "License:" . $info['key'] . "%0D%0A%0D%0A";
                                 $body .= 'Systems Info:' . home_url() . "?support_info" . "%0D%0A%0D%0A";
@@ -494,7 +495,7 @@ if (!class_exists('wp_hide_post'))
                             }
                         else
                         {
-                                $output[] = "Sorry you don't have WP hide post Pro license";
+                                $output[] = sprintf('Sorry you don\'t have %1$s license',wphp_pro_text());
                             }
                             $output[] = '<h2>For WP hide post Lite users</h2>';
                         }
@@ -504,6 +505,7 @@ if (!class_exists('wp_hide_post'))
 
                     },
                 ));
+
             if ((defined('WPHP_PRO') && WPHP_PRO) || $this->info('id') == 'wp-hide-post-pro')
             {
 
@@ -521,6 +523,7 @@ if (!class_exists('wp_hide_post'))
                     )
                 );
             }
+         
         }
         public function define_globals()
         {

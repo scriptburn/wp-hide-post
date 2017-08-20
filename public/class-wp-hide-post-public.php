@@ -433,6 +433,7 @@ if (!class_exists('wp_hide_post_Public'))
 
             if ($front || is_archive())
             {
+                p_d(wphp_allowed_post_types());
                 $query->set('post_type', wphp_allowed_post_types());
 
             }
