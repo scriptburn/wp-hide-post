@@ -110,7 +110,7 @@ if (!class_exists('wp_hide_post_Public'))
              * class.
              */
 
-            wp_enqueue_script($this->wp_hide_post, plugin_dir_url(__FILE__) . 'js/wp-hide-post-public.js', array('jquery'), $this->version, false);
+            // wp_enqueue_script($this->wp_hide_post, plugin_dir_url(__FILE__) . 'js/wp-hide-post-public.js', array('jquery'), $this->version, false);
 
         }
         private function exclude_low_profile_items($item_type, $posts)
