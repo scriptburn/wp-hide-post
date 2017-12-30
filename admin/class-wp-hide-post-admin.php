@@ -1160,7 +1160,7 @@ $current_v = isset($_GET['wphp_hidden_on']) ? $_GET['wphp_hidden_on'] : array();
 </div><div style="clear:both">' . $price ? '' : '
 <div style="text-align:center">
     <a href="http://scriptburn.com/wp-hide-post">
-        <img src="http://www.paypalobjects.com/webstatic/en_US/btn/btn_donate_pp_142x27.png"/>
+        <img src="https://www.paypalobjects.com/webstatic/en_US/btn/btn_donate_pp_142x27.png"/>
     </a>
 </div>
 <div style="clear:both">
