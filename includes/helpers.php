@@ -155,7 +155,7 @@ if (!function_exists('wphp_is_applicable'))
             //p_n(__LINE__);
             $ret = 1;
         }
-        elseif (is_admin() || is_singular())
+        elseif ((is_admin() && ! wp_doing_ajax()) || is_singular())
         {
 
             if (@is_front_page())

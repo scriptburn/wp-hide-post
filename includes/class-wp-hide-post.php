@@ -319,7 +319,7 @@ if (!class_exists('wp_hide_post'))
          */
         private function define_public_hooks()
         {
-            if (is_admin())
+            if (is_admin() && ! wp_doing_ajax())
             {
                 return;
             }

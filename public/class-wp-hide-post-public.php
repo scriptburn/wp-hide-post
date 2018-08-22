@@ -411,7 +411,7 @@ if (!class_exists('wp_hide_post_Public'))
         {
 
             // Only filter the main query on the front-end
-            if (is_admin() || !$query->is_main_query())
+            if ((is_admin() && ! wp_doing_ajax()) || !$query->is_main_query())
             {
                 return;
             }
