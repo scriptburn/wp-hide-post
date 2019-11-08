@@ -72,7 +72,7 @@ if (!class_exists('wp_hide_post_Admin'))
 			{
 				$this->post_types[] = 'acme_product';
 			}
-
+ 
 			return $this;
 		}
 		public function allowedPostTypes($post_type = null)
@@ -706,9 +706,22 @@ HTML;
 					'type' => 'multi',
 					'options' => function ()
 					{
-						$options = apply_filters('wphpp_available_post_types', [], 'selectables');
+						$post_types = array();
 
-						return $options;
+						foreach ((array) scb_custom_post_types() as $type => $detail)
+						{
+							$detail = (array) $detail;
+
+							$post_types[$type] = array('text' => $detail['labels']->name);
+							if ( !$detail['_builtin'])
+							{
+								$post_types[$type]['extra'] = 'disabled';
+								$post_types[$type]['text'] .= sprintf(' -- For %1$s users only', 'Pro');
+							}
+						}
+
+						$options = apply_filters('wphpp_available_post_types', $post_types, 'selectables');
+  						return $options;
 					},
 					'placeholder' => 'Select custom post type',
 				),

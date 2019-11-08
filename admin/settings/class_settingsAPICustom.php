@@ -137,7 +137,7 @@ if (!class_exists('wphp_settingsAPICustom'))
                     $extra = isset($label['extra'])?$label['extra']:'';
                     $label = @$label['text'];
                 }
-                $html .= sprintf('<option %s value="%s"%s>%s</option>', $extra, $key, in_array($key, $value) ? 'selected' : '', $label);
+                $html .= sprintf('<option %s value="%s"%s>%s</option>', $extra, $key,$extra=='disabled'&& @$args['multiple']?"": in_array($key, $value) ? 'selected' : '', $label);
             }
 
             $html .= sprintf('</select>');
