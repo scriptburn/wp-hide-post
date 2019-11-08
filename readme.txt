@@ -3,7 +3,7 @@ Contributors: scriptburn
 Donate link: http://scriptburn.com/wp-hide-post/
 Tags: SEO,hide,show,visbility,privacy,customization,sitemap,filter
 Requires at least: 2.6
-Tested up to: 4.9
+Tested up to: 5.2
 Stable tag: 2.0.12
 License: GPLv2
 
@@ -110,6 +110,13 @@ Ditto. It will be deleted. If you had any existing data (if you had it active be
 
 
 == Changelog ==
+
+= 2.0.12 =
+*Release Date - 8 Nov 2019*
+
+* Php version 7 compatibility
+* Compatibility with Wordpress 5.2
+
 
 = 2.0.11 =
 *Release Date - 18 Aug 2017*
