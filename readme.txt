@@ -111,6 +111,15 @@ Ditto. It will be deleted. If you had any existing data (if you had it active be
 
 == Changelog ==
 
+= 2.0.12 =
+*Release Date - 8 Nov 2019 *
+
+* 	Bug fix caused by php 7
+* 	Added compatibility with Wordpress 5.1.4
+*	Added some more test cases
+
+
+
 = 2.0.11 =
 *Release Date - 18 Aug 2017*
 
