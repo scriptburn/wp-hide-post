@@ -51,14 +51,14 @@ if (!class_exists('SCB_Item_Helper'))
 
             }
             $update_cache = get_site_transient('update_plugins');
-             if (  isset($update_cache->response[$this->item_file_name]) &&  ($update_cache->response[$this->item_file_name]->upgrade_notice)  )
+            if (isset($update_cache->response[$this->item_file_name]) && ($update_cache->response[$this->item_file_name]->upgrade_notice))
             {
-                $upgrade_notice=$update_cache->response[$this->item_file_name]->upgrade_notice;
-                $hook   = "in_plugin_update_message-" . $this->item_file_name;
-                add_action($hook, function ($plugin_data, $r) use($upgrade_notice)
+                $upgrade_notice = $update_cache->response[$this->item_file_name]->upgrade_notice;
+                $hook           = "in_plugin_update_message-" . $this->item_file_name;
+                add_action($hook, function ($plugin_data, $r) use ($upgrade_notice)
                 {
 
-                    echo($upgrade_notice);
+                    echo ($upgrade_notice);
 
                 }, 20, 2);
             }
@@ -73,7 +73,8 @@ if (!class_exists('SCB_Item_Helper'))
         {
             $default = array('version' => "0", 'license' => "", "item_name" => '', "author" => "");
 
-            try {
+            try
+            {
                 $plugin_file = WP_PLUGIN_DIR . "/" . $this->item_file_name;
                 // $this->debug('license', __FUNCTION__ . "-" . __LINE__, $plugin_file);
                 if (!function_exists('get_plugin_data'))
@@ -83,6 +84,7 @@ if (!class_exists('SCB_Item_Helper'))
                 //$this->debug('license', __FUNCTION__ . "-" . __LINE__,  $d);
 
                 $this->item_arr[$this->item_file_name] = get_plugin_data($plugin_file);
+
                 set_transient($this->transient_name, $this->item_arr);
                 return $this->item_arr;
             }
@@ -105,11 +107,11 @@ if (!class_exists('SCB_Item_Helper'))
                 {
                     $ret = $this->refresh_plugin_data();
                     return $key ? $ret[$this->item_file_name][$key] : $ret[$this->item_file_name];
-
                 }
 
             }
-            return $key ? $this->item_arr[$this->item_file_name][$key] : $this->item_arr[$this->item_file_name];
+
+            return $key ? @$this->item_arr[$this->item_file_name][$key] : @$this->item_arr[$this->item_file_name];
 
         }
         public function refresh_theme_data()
@@ -156,7 +158,7 @@ if (!class_exists('SCB_Item_Helper'))
 
         public function plugin_updater()
         {
-            
+
             $plugin_data = $this->plugin_data("", true);
             $plugin_conf = array(
                 'version'   => $plugin_data['Version'], // current version number
@@ -167,7 +169,7 @@ if (!class_exists('SCB_Item_Helper'))
             );
             //$this->debug('license', __FUNCTION__ . "-" . __LINE__, 'plugin_updater');
 
-            $updater = new SCB_SL_Plugin_Updater($this->store, $this->item_file_name, $plugin_conf);
+            return new SCB_SL_Plugin_Updater($this->store, $this->item_file_name, $plugin_conf);
         }
 
         public function theme_updater()
