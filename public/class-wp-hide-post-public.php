@@ -110,7 +110,7 @@ if (!class_exists('wp_hide_post_Public'))
              * class.
              */
 
-            wp_enqueue_script($this->wp_hide_post, plugin_dir_url(__FILE__) . 'js/wp-hide-post-public.js', array('jquery'), $this->version, false);
+            //wp_enqueue_script($this->wp_hide_post, plugin_dir_url(__FILE__) . 'js/wp-hide-post-public.js', array('jquery'), $this->version, false);
 
         }
         private function exclude_low_profile_items($item_type, $posts)
@@ -339,19 +339,10 @@ if (!class_exists('wp_hide_post_Public'))
             p_l($join);
             return $join;
         }
-        /**
-         * add join clauss in main filter query
-         *
-         * @since    1.2.2
-         */
 
-        public function query_posts_join($join, &$wp_query)
+
+        private function query_posts_join($join,  &$wp_query)
         {
-            if (isset($wp_query->query['wphp_inside_recent_post_sidebar']))
-            {
-                //p_n($wp_query);
-            }
-
             // p_n("called: wphp_query_posts_join");
             if (wphp_is_applicable('post', $wp_query) && wphp_is_applicable('page', $wp_query))
             {
@@ -367,6 +358,18 @@ if (!class_exists('wp_hide_post_Public'))
 
             return $join;
         }
+        /**
+         * add join clauss in main filter query
+         *
+         * @since    1.2.2
+         */
+
+        public function query_posts_join_p5($join,  &$wp_query)
+        {
+             
+            return $this->query_posts_join($join,  $wp_query);
+             
+        }
 
         /**
          * add join clauss in main filter query ,This partiucular function only runs when runnign in unit test, Needed to create seperate function due to weird phpunit bug that was throwing warning "Parameter 2 to wp_hide_post_Public::query_posts_join() expected to be a reference, value given" only when running in unit tests
@@ -374,27 +377,11 @@ if (!class_exists('wp_hide_post_Public'))
          * @since    2.0.11
          */
 
-        public function query_posts_join_unit($join, $wp_query)
+        public function query_posts_join_p7($join,  $wp_query)
         {
-            if (isset($wp_query->query['wphp_inside_recent_post_sidebar']))
-            {
-                //p_n($wp_query);
-            }
+             
+            return $this->query_posts_join($join,  $wp_query);
 
-            // p_n("called: wphp_query_posts_join");
-            if (wphp_is_applicable('post', $wp_query) && wphp_is_applicable('page', $wp_query))
-            {
-
-                if (!$join)
-                {
-                    $join = '';
-                }
-                $params = array('table' => WP_POSTS_TABLE_NAME, 'wp_query' => $wp_query);
-                $join .= $this->get_exclude_join($params);
-
-            }
-
-            return $join;
         }
 
         public function post_excluded_terms_join_rel($join)
@@ -411,7 +398,7 @@ if (!class_exists('wp_hide_post_Public'))
         {
 
             // Only filter the main query on the front-end
-            if (is_admin() || !$query->is_main_query())
+            if ((is_admin() && ! wp_doing_ajax()) || !$query->is_main_query())
             {
                 return;
             }

@@ -13,9 +13,7 @@ class TestCustomPosts extends WPBASE_UnitTestCase
 {
     public function setUp()
     {
-        $this->mysql_dump_bin = '/Applications/MAMP/Library/bin/mysqldump';
-        $this->mysql_bin      = '/Applications/MAMP/Library/bin/mysql';
-
+         
         parent::setUp();
 
         // Add to the admin_init hook of your theme functions.php file

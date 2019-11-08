@@ -37,7 +37,7 @@ class SCB_SL_Plugin_Updater
         $this->version  = $_api_data['version'];
 
         // Set up hooks.
-        if (wphp_ispro())
+        //if (wphp_ispro())
         {
             $this->init();
             add_action('admin_init', array($this, 'show_changelog'));
@@ -300,14 +300,14 @@ class SCB_SL_Plugin_Updater
      * @param array   $_data   Parameters for the API action.
      * @return false||object
      */
-    private function api_request($_action, $_data)
+    public function api_request($_action, $_data)
     {
 
         global $wp_version;
 
         $data = array_merge($this->api_data, $_data);
-
-        if ($data['slug'] != $this->slug)
+ 
+        if ($data['slug'] != $this->slug && !defined('RUNNING_WPHP_UNIT_TEST'))
         {
             return;
         }
@@ -323,6 +323,7 @@ class SCB_SL_Plugin_Updater
         }
 
         $api_params = array(
+            'edd_action1' => $_action,
             'edd_action' => 'get_version',
             'license'    => $data['license'],
             'item_name'  => isset($data['item_name']) ? $data['item_name'] : false,
@@ -330,8 +331,9 @@ class SCB_SL_Plugin_Updater
             'slug'       => $data['slug'],
             'author'     => $data['author'],
             'url'        => home_url(),
+            'local_dev'=>defined('WPHP_LOCAL_DEV')?1:0
         );
-
+ 
         $request = wp_remote_post($this->api_url, array('timeout' => 15, 'sslverify' => false, 'body' => $api_params));
         //p_l($request);
         if (!is_wp_error($request))

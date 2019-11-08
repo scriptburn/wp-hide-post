@@ -25,7 +25,9 @@ function _manually_load_plugin()
 tests_add_filter('muplugins_loaded', '_manually_load_plugin');
 define('RUNNING_WPHP_UNIT_TEST',1);
 // Start up the WP testing environment.
+
 require $_tests_dir . '/includes/bootstrap.php';
+$table_prefix  = 'wpt_';
 require __DIR__ . '/../bin/trait_exec.php';
 
 require __DIR__ . '/../bin/base_class.php';
