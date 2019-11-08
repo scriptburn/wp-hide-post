@@ -3,7 +3,7 @@ Contributors: scriptburn
 Donate link: http://scriptburn.com/wp-hide-post/
 Tags: SEO,hide,show,visbility,privacy,customization,sitemap,filter
 Requires at least: 2.6
-Tested up to: 4.9
+Tested up to: 5.2
 Stable tag: 2.0.12
 License: GPLv2
 
